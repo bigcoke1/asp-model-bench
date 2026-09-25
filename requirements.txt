@@ -1,0 +1,6 @@
+# Laya pulls torch 2.14, transformers 5.x and huggingface_hub 1.x; install into a venv.
+# 0.3.7 is gone from PyPI; installed from its GitHub tag, pinned to the commit.
+laya @ git+https://github.com/NandhaKishorM/laya@010bacef009c855ccba814b51f7c8e1d38ab5e3f
+# bench.py's production-prompt column imports rail-center's profiling package, which needs these.
+pydantic>=2.10
+pyyaml>=6.0
