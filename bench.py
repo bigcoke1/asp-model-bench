@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Stock Laya vs Gemini vs qwen3:14b (and Jev, when it answers) on the same ASP scoring questions.
+"""Stock Laya vs Gemini vs qwen3:14b vs JevK5 (and Jev, when it answers) on the same ASP scoring questions.
 
-Four systems get the SAME text and the SAME question for each item:
+Five systems get the SAME text and the SAME question for each item:
   - items: the asp-datagen pilot bundles, `identity` and `containment`, skipping any the coverage
     profiler would mark INSUFFICIENT_EVIDENCE, plus one empty-state null control per category;
   - text: the bundle cut to the category's scope and rendered as English (asp_score.py
@@ -9,13 +9,14 @@ Four systems get the SAME text and the SAME question for each item:
   - question: asp_score.question(), ten levels scored 1-10 with 10 safest. Ten, not the design
     doc's eleven, because Jev takes at most ten score levels.
 
-A fifth, `gemini-prod`, is Gemini asked the way Rail Center's LLM profiler asks it: the whole
+A sixth, `gemini-prod`, is Gemini asked the way Rail Center's LLM profiler asks it: the whole
 bundle through rail-center's own `profiling.prompt.render_prompt` (v7), every category coverage
 clears in one call, scored 0-10. It never sees the empty-state control, because production never
 asks a model when coverage clears nothing.
 
 Each system answers each item --runs times (default 3) and the median is its score. The LLMs run
-at temperature 0, as Rail Center's profiler calls its model; Laya is deterministic.
+at temperature 0, as Rail Center's profiler calls its model; Laya and JevK5 generate nothing and
+read their answer from the model's probabilities.
 
 There is no ground truth, so the systems are compared on whether their scores follow the facts a
 bundle visibly shows (asp-datagen datagen/check.py), on the null control, and on how they rank
@@ -25,9 +26,12 @@ Results go to bench_results.json: settings, every item with the exact text sent,
 medians, and the summary, so a later reader needs nothing but that file.
 
 Keys come from the environment: GOOGLE_API_KEY for Gemini; JEV_API_KEY (+ JEV_BASE_URL, JEV_MODEL)
-for Jev. qwen3:14b is served by a local Ollama.
+for Jev. qwen3:14b is served by a local Ollama; JevK5 by a local llama-server (JEVK5_URL):
 
-    python bench.py [--systems laya gemini gemini-prod qwen] [--runs 3]
+    llama-server --hf-repo alibiserikbay/JevK5-GGUF --hf-file jevk5-4b-v0.3-Q8_0.gguf \
+        -c 8192 -ngl 99 --port 8093
+
+    python bench.py [--systems laya gemini gemini-prod qwen jevk5] [--runs 3]
     python bench.py --systems gemini-prod --merge     # add one system to the existing results
     python bench.py --report                          # print the tables from bench_results.json
 """
@@ -193,6 +197,35 @@ class Qwen:
             return {"score": None}
 
 
+class JevK5:
+    """JevK5 v0.3 (4B, Q8_0 GGUF): an open Jev-class model, read through a local llama-server.
+
+    Like Laya it generates nothing: the answer letters' probabilities at one position, under the
+    file's calibration temperature, are the answer, and the score is the expected level.
+    """
+    key, label = "jevk5", "JevK5"
+    FILE, SHA256 = "jevk5-4b-v0.3-Q8_0.gguf", "aea433883bc7ed399f2fbd539e53d2eac7caf71a946fe6650995a413979d4a30"
+    TEMPERATURE = 1.22  # this file's, from the JevK5-GGUF card; the client's docstring still says 1.367
+
+    def __init__(self):
+        import jevk5
+        self.url = os.environ.get("JEVK5_URL", "http://127.0.0.1:8093")
+        with urllib.request.urlopen(self.url + "/props", timeout=30) as r:
+            props = json.loads(r.read())
+        if not props.get("model_path", "").endswith(self.FILE):
+            sys.exit(f"jevk5: {self.url} serves {props.get('model_path')}, not {self.FILE}")
+        self.model = jevk5.JevK5GGUF(self.url, temperature=self.TEMPERATURE)
+        self.name = "jevk5 (4b v0.3 Q8_0, llama.cpp)"
+        self.settings = {"checkpoint": f"alibiserikbay/JevK5-GGUF {self.FILE}", "sha256": self.SHA256,
+                         "client": f"jevk5 {jevk5.__version__}", "server": f"llama.cpp {props.get('build_info')}",
+                         "temperature": self.TEMPERATURE, "scale": "1-10", "input": "scoped prose + short question"}
+
+    def __call__(self, item, run):
+        a = self.model.decide(item["state"], A.question(item["category"]))
+        probs = [a["probabilities"][str(i)] for i in range(10)]
+        return {"score": round(a["score"] + 1, 4), "p_top": max(probs), "probs": [round(p, 4) for p in probs]}
+
+
 class Jev:
     key, label = "jev", "Jev"
 
@@ -319,7 +352,11 @@ def table(doc) -> str:
         vals = " / ".join(f"{x:.1f}" for x in v.values())
         if worst > top:
             return f"✗ {vals}: safer than every real bundle"
-        return f"✓ {vals}" if worst <= min(summary[n]["mean_real"].values()) else f"~ {vals}"
+        if worst <= min(summary[n]["mean_real"].values()):
+            return f"✓ {vals}"
+        below = lambda c: [r["median"] < v[c] for r in doc["results"][n]
+                           if r["category"] == c and r["bundle_id"] != "NULL" and r["median"] is not None]
+        return f"~ {vals}: safer than " + " / ".join(f"{sum(b)} of {len(b)}" for b in map(below, v)) + " real bundles"
 
     def priv(n):
         d = summary[n]["containment_priv_root_le2"]
@@ -362,15 +399,15 @@ def table(doc) -> str:
 
 def ordered(results, settings):
     """Columns in a fixed order, so the two Gemini columns sit side by side."""
-    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, Jev.label]
+    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, JevK5.label, Jev.label]
     rank = lambda n: order.index(settings[n]["label"]) if settings[n]["label"] in order else len(order)
     return {n: results[n] for n in sorted(results, key=rank)}
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--systems", nargs="+", default=["laya", "gemini", "gemini-prod", "qwen"],
-                    choices=["laya", "gemini", "gemini-prod", "qwen", "jev"])
+    ap.add_argument("--systems", nargs="+", default=["laya", "gemini", "gemini-prod", "qwen", "jevk5"],
+                    choices=["laya", "gemini", "gemini-prod", "qwen", "jevk5", "jev"])
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
     ap.add_argument("--out", default=str(HERE / "bench_results.json"))
@@ -386,7 +423,7 @@ def main():
     agent = laya.load(*laya.DEFAULT_MODELS["typed-decisions"][:1], subfolder="typed-decisions")
     its = items(agent)
     make = {"laya": lambda: Laya(agent), "gemini": lambda: Gemini(args.gemini_model),
-            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "jev": Jev}
+            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "jevk5": JevK5, "jev": Jev}
     systems = [make[k]() for k in args.systems]
 
     results, status, settings = {}, {}, {}
