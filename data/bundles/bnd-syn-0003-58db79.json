@@ -1,0 +1,329 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0003-58db79",
+  "host_id": "host-54c95656",
+  "sandbox_name": "ci-triage-crewai",
+  "collected_at": "2026-09-02T15:35:30Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 3600
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "devops",
+        "com.docker.compose.service": "ci-triage-agent"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:289b53f1cedd0c92b37ccec1373865f651ca8d690e4b4a8e0b1881fc6c29de88",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "CrewLLM-0.9.3",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://llm-gw.devops.svc:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp1-example-net.devops.svc:7443",
+          "sessions": 3,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp2-example-net.devops.svc:7443",
+          "sessions": 5,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.pipeline.analyze",
+        "service.github.create-branch"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 3600s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no hosts declared in harness config or env"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "db.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "circleci.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "github.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "gitlab.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.devops.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "db.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "circleci.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "github.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "gitlab.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.devops.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "DB_CREDENTIALS_CI",
+          "class": "secret_plaintext",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "56c8…"
+        },
+        {
+          "name": "TOKEN_CIRCLECI",
+          "class": "secret_ref",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "1002…"
+        },
+        {
+          "name": "MTLS_CRED",
+          "class": "secret_ref",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "ce26…"
+        },
+        {
+          "name": "TOKEN_GITHUB",
+          "class": "secret_plaintext",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "c769…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "DB_CREDENTIALS_CI": "injected",
+        "TOKEN_CIRCLECI": "injected",
+        "MTLS_CRED": "injected",
+        "TOKEN_GITHUB": "baked"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/var/run/docker.sock",
+          "target": "/var/run/docker.sock",
+          "mode": "rw"
+        },
+        {
+          "source": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "target": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/ci-triage",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "nobody",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "absence is NOT evidence of restriction"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.pipeline.analyze",
+          "service.github.create-branch"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": false,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "triage-failed-ci-pipelines",
+          "description": "Automatically assesses failing CI pipelines and identifies root causes.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

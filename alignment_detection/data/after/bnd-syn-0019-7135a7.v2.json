@@ -1,0 +1,325 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0019-7135a7.v2",
+  "host_id": "host-164d52c0",
+  "sandbox_name": "order-status-agent",
+  "collected_at": "2026-09-18T22:34:01Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1800
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "ecommerce-system",
+        "com.docker.compose.service": "order-status-agent-deployment"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:12f94f83085c34959d3493fcac560a457d3f543bcf9aa2efc8d02df7a194cefd",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "UNKNOWN_HARNESS",
+      "note": "fingerprint: python3.12 + uvicorn + an agent loop in /app/main.py"
+    },
+    "framework_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "package manifest is in the image, which was not reached"
+    },
+    "model_name": {
+      "value": "bard-llm-v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no model traffic in the 1800s window"
+    },
+    "mcp_servers_declared": {
+      "value": [
+        {
+          "name": "mcp-01",
+          "root": "/data/order-status",
+          "mode": "ro"
+        },
+        {
+          "name": "mcp-02",
+          "root": "/data/order-status",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "parsed .mcp.json"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "transport": "http",
+          "sessions": 5,
+          "endpoint": "mcp-01.ecommerce-system.svc:7443"
+        },
+        {
+          "transport": "http",
+          "sessions": 1,
+          "endpoint": "mcp-02.ecommerce-system.svc:7443"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.order.query"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1800s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "DB-HOST-01",
+          "tls": true
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "hosts in harness config; hosts built in code are not visible"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "db-host-01",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "saas-api-01",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "payment-gateway-01",
+          "tls": true,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED",
+      "note": "declared side is a floor, so the difference would overcount"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "SAAS_CREDENTIALS",
+          "class": "secret_ref",
+          "type": "saas",
+          "shape": "atat-***",
+          "sha256": "6585…"
+        },
+        {
+          "name": "DB_CREDENTIALS",
+          "class": "secret_plaintext",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "950b…"
+        },
+        {
+          "name": "API_TOKEN",
+          "class": "mount",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "8b56…"
+        },
+        {
+          "name": "MTLS_CERT",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "f0c2…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "baked-vs-injected needs image and runtime together"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/data/order-status",
+          "target": "/data",
+          "mode": "ro"
+        },
+        {
+          "source": "/etc",
+          "target": "/host/etc",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/order-status",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": true
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.order.query",
+          "service.payment.verify"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "check-order",
+          "description": "Tells the customer the current status of their order",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        },
+        {
+          "name": "verify-payment",
+          "description": "Checks if the customer's payment is valid and sufficient",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "payment-gateway-01"
+          ]
+        },
+        {
+          "name": "update-status",
+          "description": "Updates the order status in the database based on the order's current state",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "db-host-01"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "read from SKILL.md frontmatter (skills built in code cannot be seen)"
+    }
+  }
+}

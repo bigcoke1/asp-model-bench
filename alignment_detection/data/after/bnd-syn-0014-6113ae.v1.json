@@ -1,0 +1,314 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0014-6113ae.v1",
+  "host_id": "host-b6259f34",
+  "sandbox_name": "manufacturing-agent",
+  "collected_at": "2026-09-14T01:51:11Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 3600
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "manufacturing",
+        "com.docker.compose.service": "manufacturing-agent-deployment"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:c39075478873aeea162e688f4463308cd3b10c91c614049f18986080b9b45a05",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "interrogated",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no version endpoint answered"
+    },
+    "framework_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "package manifest is in the image, which was not reached"
+    },
+    "model_name": {
+      "value": "claude-code/2.1.252",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://LLM-GW.MANUFACTURING.SVC:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": [
+        {
+          "name": "mcp-prod-01-manufacturing-example-com",
+          "root": "/data/manufacturing-dashboard",
+          "mode": "ro"
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "parsed .mcp.json; servers built in code are not visible"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-prod-01-manufacturing-example-com.manufacturing.svc:7443",
+          "sessions": 4,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-prod-02-manufacturing-example-com.manufacturing.svc:7443",
+          "sessions": 2,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "order.file.maintenance",
+        "sensor.read.dashboard",
+        "credential.check"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 3600s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no hosts declared in harness config or env"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "dashboard-prod.manufacturing.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "maintenance-api.manufacturing.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.manufacturing.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "dashboard-prod.manufacturing.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "maintenance-api.manufacturing.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.manufacturing.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "DATABASE_PASSWORD",
+          "class": "mount",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "40db…"
+        },
+        {
+          "name": "MTLS_CLIENT_CERT",
+          "class": "mount",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "08da…"
+        },
+        {
+          "name": "SAAS_ACCESS_TOKEN",
+          "class": "mount",
+          "type": "saas",
+          "shape": "atat-***",
+          "sha256": "1c87…"
+        },
+        {
+          "name": "DB_CREDENTIALS",
+          "class": "mount",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "d826…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "baked-vs-injected needs image and runtime together"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/",
+          "target": "/host",
+          "mode": "ro"
+        },
+        {
+          "source": "tmpfs",
+          "target": "/tmp",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/manufacturing-agent/",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "root",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for an approval block"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "sandbox_network_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "system_prompt_present": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "read-sensor-dashboard",
+          "description": "Gathers data from sensor dashboards and reports anomalies.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        },
+        {
+          "name": "file-maintenance-order",
+          "description": "Automates the creation of maintenance orders based on sensor readings.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "maintenance-requests-2",
+            "logistics-4"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "note": "skills config is in the image, which was not reached",
+      "authored_by": "none"
+    }
+  }
+}

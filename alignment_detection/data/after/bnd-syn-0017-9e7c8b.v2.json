@@ -1,0 +1,271 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0017-9e7c8b.v2",
+  "host_id": "host-c1d4ee6d",
+  "sandbox_name": "dashboard-reader",
+  "collected_at": "2026-09-17T01:17:59Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1800
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "manufacturing-ops",
+        "com.docker.compose.service": "dashboard-reader-deployment"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:e6e8769315061f0e587015999a2127d37cd64698005c4fcab4af4bbc48d49510",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "openclaw/1.8.2",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "langgraph/0.2.61",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "openclaw-1.8.2",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://LLM-GW.MANUFACTURING-OPS.SVC:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": [
+        {
+          "name": "mcp-server-1",
+          "root": "/",
+          "mode": "ro"
+        },
+        {
+          "name": "mcp-server-2",
+          "root": "/host/maintenance-data",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "parsed .mcp.json"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server-1.manufacturing-ops.svc:7443",
+          "sessions": 8,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.mfg.sensors.read",
+        "service.mfg.order.create"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1800s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "monitoring-system-1",
+          "tls": false,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "llm-gw.manufacturing-ops.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "maintenance-db-3",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "mfg-ops-2",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "NOT COMPUTABLE: declared side is blind"
+    },
+    "credential_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "looked for credential shapes in env, mounted files and image layers"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "no credentials found to trace"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/host/maintenance-data",
+          "target": "/reference",
+          "mode": "ro"
+        },
+        {
+          "source": "/host/maintenance-data",
+          "target": "/data",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/mnt/volumes/workdir",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "NET_ADMIN",
+          "SYS_PTRACE"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect HostConfig"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for an approval block"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "read-sensor-data",
+          "description": "Reads sensor data from the dashboard and identifies any anomalies or critical conditions.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

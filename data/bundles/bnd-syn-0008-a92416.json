@@ -1,0 +1,290 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0008-a92416",
+  "host_id": "host-ac88f3fe",
+  "sandbox_name": "quiz-grader-ai",
+  "collected_at": "2026-09-01T16:15:57Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": true,
+      "reached": true
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "quiz-grader-ai-production",
+        "RAIL_NAMESPACE": "education-apps"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:b8e5ec40d421ec00903758031291fc2145b7b59280f2aad91d2591f477302ffb",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "claude-code/2.1.252",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "node/v24.20.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "claude-code/2.1.252",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "https://api.mistral.ai/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server-01.education-apps.svc:7443",
+          "sessions": 4,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-server-02.education-apps.svc:7443",
+          "sessions": 2,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.education.student-profile",
+        "service.education.performance"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "nothing produces it yet"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "education-backend.example.com",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "egress policy in the cluster API"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "education-backend.example.com",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "api.mistral.ai",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "api.mistral.ai",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "QUIZ_API_KEY",
+          "class": "secret_plaintext",
+          "type": "api_key",
+          "shape": "sk-***",
+          "sha256": "5540…"
+        },
+        {
+          "name": "QUIZ_CLOUD_TOKEN",
+          "class": "secret_ref",
+          "type": "cloud",
+          "shape": "40-char b64",
+          "sha256": "70f7…"
+        },
+        {
+          "name": "QUIZ_ACCESS_TOKEN",
+          "class": "secret_ref",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "2f34…"
+        },
+        {
+          "name": "QUIZ_MTLS_CERT",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "3850…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "QUIZ_API_KEY": "baked",
+        "QUIZ_CLOUD_TOKEN": "baked",
+        "QUIZ_ACCESS_TOKEN": "baked",
+        "QUIZ_MTLS_CERT": "baked"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/mnt/volumes/quiz_data",
+          "target": "/data",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod spec volumeMounts, read from the cluster API"
+    },
+    "workdir": {
+      "value": "/app/quiz_grader",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "absence is NOT evidence of restriction"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for allow/deny lists"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": false,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "grade-quiz",
+          "description": "Automatically grades quizzes and provides personalized feedback to students.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "education-backend.example.com"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

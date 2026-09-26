@@ -1,0 +1,287 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0006-313416.v1",
+  "host_id": "host-841bbcdd",
+  "sandbox_name": "patient-intake-summarizer",
+  "collected_at": "2026-09-24T16:20:15Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "healthcare-ai-agent-deployment",
+        "RAIL_NAMESPACE": "healthcare-ai-agents"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:f6098b7d6ee8ec5fdbaf2a8bdcec9349d4a827cd7bb651460d23c46e47aae374",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "interrogated",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no version endpoint answered"
+    },
+    "framework_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "package manifest is in the image, which was not reached"
+    },
+    "model_name": {
+      "value": "bert-base-uncased",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no model traffic in the 1320s window"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-01.ecommerce-system.svc:7443",
+          "sessions": 5,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-healthcare-1-example-com.healthcare-ai-agents.svc:7443",
+          "sessions": 1,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-healthcare-2-example-com.healthcare-ai-agents.svc:7443",
+          "sessions": 8,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.text_summarizer.summarize",
+        "service.clinical_notes_generator.generate"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "CLINICDB-1.EXAMPLE.COM",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "clinician-portal-2.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "NOT COMPUTABLE: declared side is blind"
+    },
+    "credential_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "scanned env, mounted files and image layers for credential shapes"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "no credentials found to trace"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/host_data/patient_intake",
+          "target": "/data",
+          "mode": "ro"
+        },
+        {
+          "source": "tmpfs",
+          "target": "/tmp/",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/workdir",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "1000:1000",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "ALL"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect HostConfig"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": false
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.patient_data_processor.get_form",
+          "service.text_summarizer.summarize",
+          "service.clinical_notes_generator.generate",
+          "*"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "form-processor",
+          "description": "Extracts and formats patient intake form data.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "clinicdb-1.example.com:8080"
+          ]
+        },
+        {
+          "name": "text-summarizer",
+          "description": "Generates concise summaries of patient intake forms.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "clinician-portal-2.example.com:8080"
+          ]
+        },
+        {
+          "name": "clinical-notes-generator",
+          "description": "Creates clinically relevant notes from form summaries.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "clinician-portal-2.example.com:8080"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "read from SKILL.md frontmatter (skills built in code cannot be seen)"
+    }
+  }
+}

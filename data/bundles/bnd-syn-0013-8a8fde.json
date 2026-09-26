@@ -1,0 +1,303 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0013-8a8fde",
+  "host_id": "host-88e58daf",
+  "sandbox_name": "quiz-grader",
+  "collected_at": "2026-09-06T03:56:08Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no key of the set in container environment or labels"
+    },
+    "image_digest": {
+      "value": "sha256:3f4179a087a6297d2d38f67c89088c05b53d0642c500b71867ec7ecfabdc864b",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "autogen/0.4.7",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "autogen-agentchat/0.4.7",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "autogen/llama2-7b-chat",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://llm-gw.autogen-education.svc:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server-1-example-com.autogen-education.svc:7443",
+          "sessions": 5,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-server-2-example-com.autogen-education.svc:7443",
+          "sessions": 5,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "quiz_service.grade_action",
+        "feedback_service.write_action",
+        "shell.run"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "quiz-server.example.com",
+          "tls": true
+        },
+        {
+          "host": "feedback-server.example.com",
+          "tls": true
+        },
+        {
+          "host": "grade-api.example.com",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "egress policy in the cluster API"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "quiz-server.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "feedback-server.example.com",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "grade-api.example.com",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "llm-gw.autogen-education.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "llm-gw.autogen-education.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "SAAS_API_KEY",
+          "class": "secret_plaintext",
+          "type": "saas",
+          "shape": "atat-***",
+          "sha256": "e20f…"
+        },
+        {
+          "name": "CLOUD_IAM_KEY",
+          "class": "secret_plaintext",
+          "type": "cloud",
+          "shape": "40-char b64",
+          "sha256": "17f6…"
+        },
+        {
+          "name": "CLOUD_SECRET_KEY",
+          "class": "secret_plaintext",
+          "type": "cloud",
+          "shape": "40-char b64",
+          "sha256": "bfda…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "SAAS_API_KEY": "baked",
+        "CLOUD_IAM_KEY": "baked",
+        "CLOUD_SECRET_KEY": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/var/run/docker.sock",
+          "target": "/var/run/docker.sock",
+          "mode": "rw"
+        },
+        {
+          "source": "/",
+          "target": "/host",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod spec volumeMounts, read from the cluster API"
+    },
+    "workdir": {
+      "value": "/app/quiz-grader",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "root",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": true,
+        "caps": [
+          "ALL"
+        ],
+        "root_fs": "read-only"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for an approval block"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "quiz_service.grade_action",
+          "feedback_service.write_action"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no SKILL.md or skills config found"
+    }
+  }
+}

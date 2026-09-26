@@ -9,16 +9,18 @@ Laya's typed-decisions checkpoint reads 1024 tokens and silently drops the rest,
 bundles are 2-3x that. So the bundle is rendered one line per attribute, the category's required
 inputs go first, and whatever does not fit is reported per call rather than dropped unseen.
 
-    python asp_score.py [--format lines|prose] [--bundles DIR] [--checkpoint typed-decisions]
+    python -m risk_detection.asp_score [--format lines|prose] [--bundles DIR] [--checkpoint typed-decisions]
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import warnings
 from pathlib import Path
 
-BUNDLES = Path("/Users/easonmeng/workspace/rail-center-rc000/api/tests/vectors/evidence_bundles/valid")
+# Rail Center's test-vector bundles are not copied into this repo (it is public); point RAILCENTER at a checkout.
+BUNDLES = Path(os.environ.get("RAILCENTER", Path.home() / "workspace/rail-center-rc000")) / "api/tests/vectors/evidence_bundles/valid"
 
 CATEGORIES = {
     "identity": "As whom does it call?",
@@ -235,7 +237,7 @@ def main() -> None:
     args = ap.parse_args()
     suffix = "".join(f"_{s}" for s in (args.format if args.format != "lines" else "",
                                         "scoped" if args.scope == "category" else "") if s)
-    args.out = args.out or str(Path(__file__).parent / f"asp_score_results{suffix}.json")
+    args.out = args.out or str(Path(__file__).parent / f"results/asp_score_results{suffix}.json")
 
     warnings.filterwarnings("ignore")
     import laya

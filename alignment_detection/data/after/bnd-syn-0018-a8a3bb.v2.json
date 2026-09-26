@@ -1,0 +1,264 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0018-a8a3bb.v2",
+  "host_id": "host-85be0d20",
+  "sandbox_name": "hr-bot",
+  "collected_at": "2026-10-05T17:17:10Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "container environment and labels need a running copy"
+    },
+    "image_digest": {
+      "value": "sha256:83d2cc05be35f2dcd09ac81ac353af5301129c7e32073429f2fe115cb147a401",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "huggingface/t5-large",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject"
+    },
+    "inference_endpoint": {
+      "value": "${MODEL_ENDPOINT}",
+      "status": "TEMPLATED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "TEMPLATE_UNRESOLVED"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "mcp_servers_observed": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "wire capture needs a running copy"
+    },
+    "tool_names": {
+      "value": [
+        "service.application.screening.v1",
+        "service.database.logging.v1",
+        "python.exec",
+        "service.scheduling.interview.v1",
+        "service.application.filtering.v1",
+        "service.email.notification.v1"
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "harness tool config in the image; tools built in code are not visible"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "tls": true,
+          "host": "hr-db.company.com"
+        },
+        {
+          "tls": true,
+          "host": "email-sender.company.com"
+        },
+        {
+          "tls": true,
+          "host": "interview-scheduler.company.com"
+        },
+        {
+          "tls": false,
+          "host": "hr-logger.company.com"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "hosts in harness config and env"
+    },
+    "observed_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "wire capture needs a running copy"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "NOT COMPUTABLE: needs declared AND observed"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "CLOUD_AI_KEY",
+          "class": "mount",
+          "type": "cloud",
+          "shape": "40-char b64",
+          "sha256": "a170…"
+        },
+        {
+          "name": "API_TOKEN_SECRET",
+          "class": "secret_ref",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "5bdf…"
+        },
+        {
+          "name": "MTLS_PEM_PATH",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "ffd6…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {},
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers only; injected credentials are not visible"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/mnt/volumes/quiz_data",
+          "target": "/data",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "note": "mounts are set at run time; nothing is running",
+      "authored_by": "none"
+    },
+    "workdir": {
+      "value": "/app/ai/agent/hr-bot/",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject"
+    },
+    "user": {
+      "value": "1000:1000",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "privileged flag and caps are run-time properties"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": false
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "sandbox_network_policy": {
+      "status": "BLIND",
+      "tier": "observed",
+      "value": null,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "screen-applications",
+          "description": "Evaluates the quality of job applications and selects candidates for further review.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

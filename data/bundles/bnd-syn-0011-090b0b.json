@@ -1,0 +1,303 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0011-090b0b",
+  "host_id": "host-fb0f96ec",
+  "sandbox_name": "ai-healthcare-summarizer",
+  "collected_at": "2026-09-02T22:56:11Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "ai-healthcare-summarizer-deployment",
+        "RAIL_NAMESPACE": "ai-healthcare"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:e557ac369c20a6c1ba9e5e7582fd9339471963bea7db10ff7a6fe41b97ba98db",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "UNKNOWN_HARNESS",
+      "note": "fingerprint: python3.12 + uvicorn + an agent loop in /app/main.py"
+    },
+    "framework_identity": {
+      "value": "fastapi/0.115.6",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "llm-healthcare-3b",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "https://generativelanguage.googleapis.com",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-ai-platform-svc-cluster-local.ai-healthcare.svc:7443",
+          "sessions": 7,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-medrec-svc-cluster-local.ai-healthcare.svc:7443",
+          "sessions": 4,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "ai-platform.text-generation.llm",
+        "ai-platform.text-summary.summarize"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "medrec-mongo.ms-01",
+          "tls": true
+        },
+        {
+          "host": "ai-platform.ms-02",
+          "tls": true
+        },
+        {
+          "host": "clinic-api.ms-03",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "egress policy in the cluster API"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "medrec-mongo.ms-01",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "ai-platform.ms-02",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "generativelanguage.googleapis.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "generativelanguage.googleapis.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "MTLS_CLIENT_CERT",
+          "class": "secret_ref",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "70e7…"
+        },
+        {
+          "name": "TOKEN",
+          "class": "mount",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "a107…"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "class": "secret_ref",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "59bc…"
+        },
+        {
+          "name": "MTLS_ROOT_CA",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "707e…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "MTLS_CLIENT_CERT": "baked",
+        "TOKEN": "injected",
+        "DB_PASSWORD": "injected",
+        "MTLS_ROOT_CA": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/",
+          "target": "/host",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod spec volumeMounts, read from the cluster API"
+    },
+    "workdir": {
+      "value": "/app/work",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "absence is NOT evidence of restriction"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "ai-platform.text-generation.llm",
+          "ai-platform.text-summary.summarize"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no SKILL.md or skills config found"
+    }
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0002-e58dcb",
+  "host_id": "host-026c1ba4",
+  "sandbox_name": "logistics-eta-updater",
+  "collected_at": "2026-09-08T23:07:49Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 600
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no key of the set in container environment or labels"
+    },
+    "image_digest": {
+      "value": "sha256:3b3c164f1a4476f11926b6cebffab8f6ea373ec6f77db2e9b5b100e7e36e37b1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "claude-2",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "https://generativelanguage.googleapis.com",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "empty because the gateway holds the list, NOT because there are none. Lower bound is >= 1, not 0."
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-gw.internal:7443",
+          "sessions": 1,
+          "transport": "http"
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "reason": "GATEWAY_MANAGED",
+      "note": "sessions to the gateway; upstream servers are not distinguishable"
+    },
+    "tool_names": {
+      "value": [
+        "service.shipping.company.update-eta",
+        "shell.run"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 600s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "carrierapi.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "logisticsbackend.example.org",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "generativelanguage.googleapis.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "NOT COMPUTABLE: declared side is blind"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "GW_CLIENT_CERT",
+          "class": "mount",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "2811…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "gateway-fronted: the agent holds one gateway credential; upstream credentials sit in the gateway"
+    },
+    "credential_provenance": {
+      "value": {
+        "GW_CLIENT_CERT": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": [
+        {
+          "layer": 2,
+          "name": "DEPLOY_KEY_OLD",
+          "deleted_in_layer": 4
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "still present in the registry image"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/data/logistics/shipments",
+          "target": "/data",
+          "mode": "rw"
+        },
+        {
+          "source": "/etc",
+          "target": "/host/etc",
+          "mode": "ro"
+        },
+        {
+          "source": "/",
+          "target": "/host",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/logistics/eta-updater",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "root",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "absence is NOT evidence of restriction; assume no approval gate"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "sandbox_network_policy": {
+      "value": "egress allow-list: carrierapi.example.com, shippingcompanyapi.example.net, logisticsbackend.example.org",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness sandbox block"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no SKILL.md or skills config found"
+    }
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0001-71b35c.v2",
+  "host_id": "host-a946b70b",
+  "sandbox_name": "pipeline-triager",
+  "collected_at": "2026-09-24T14:32:23Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1800
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "pipeline-triager-deployment",
+        "RAIL_NAMESPACE": "ci-triage"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:6f86d805a78a7515c37542a3e10956986a539ffbfe7ef41fd38476eb6f565cbf",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "UNKNOWN_HARNESS",
+      "note": "fingerprint: python3.12 + uvicorn + an agent loop in /app/main.py"
+    },
+    "framework_identity": {
+      "value": "fastapi/0.115.6",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "bard-llm",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://LLM-GW.CI-TRIAGE.SVC:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server01.ci-triage.svc:7443",
+          "sessions": 6,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-server02.ci-triage.svc:7443",
+          "sessions": 1,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.git.commit",
+        "service.notifications.send",
+        "service.pipeline.inspect",
+        "service.git.pull-request",
+        "service.code.review",
+        "service.log.stream"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1800s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "github-123",
+          "tls": true
+        },
+        {
+          "host": "slack-workspace",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "hosts in harness config and env"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "ci-server01",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "github-123",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "slack-workspace",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.ci-triage.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "llm-gw.ci-triage.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "scanned env, mounted files and image layers for credential shapes"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "no credentials found to trace"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "target": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "mode": "rw"
+        },
+        {
+          "source": "/run/secrets/pipeline-triager",
+          "target": "/run/secrets",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/app/pipeline-triager",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "agent",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "NET_BIND_SERVICE"
+        ],
+        "root_fs": "read-only"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "HostConfig, from container inspect"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for an approval block"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": false,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no SKILL.md or skills config found"
+    }
+  }
+}

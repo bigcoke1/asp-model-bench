@@ -1,0 +1,267 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0010-2774bd.v2",
+  "host_id": "host-5262238f",
+  "sandbox_name": "hr-bot",
+  "collected_at": "2026-09-23T10:45:10Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": true,
+      "reached": true
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no key of the set in container environment or labels"
+    },
+    "image_digest": {
+      "value": "sha256:2f149198adececca3db1d125917181c7d543dcdb98e716504c479c2bc2b1faa3",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "openclaw/1.8.2",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "langgraph/v0.2.61",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "openclaw-llm/1.8.2",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://llm-gw.hr-namespace.svc:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "empty because the gateway holds the list, NOT because there are none. Lower bound is >= 1, not 0."
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-gw.internal:7443",
+          "sessions": 6,
+          "transport": "http"
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "reason": "GATEWAY_MANAGED",
+      "note": "sessions to the gateway; upstream servers are not distinguishable"
+    },
+    "tool_names": {
+      "value": [
+        "service.application-screening.resource.schedule-interview"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "nothing produces it yet"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "hr-db-server1",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "interview-scheduler-service",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.hr-namespace.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "NOT COMPUTABLE: declared side is blind"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "sha256": "46a8…",
+          "shape": "pem",
+          "type": "mtls",
+          "class": "mount",
+          "name": "GW_CLIENT_CERT"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "gateway-fronted: the agent holds one gateway credential; upstream credentials sit in the gateway"
+    },
+    "credential_provenance": {
+      "value": {
+        "GW_CLIENT_CERT": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "container inspect: no bind or volume mounts"
+    },
+    "workdir": {
+      "value": "/home/hr-bot",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "status": "BLIND",
+      "tier": "observed",
+      "value": null,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "SYS_ADMIN"
+        ],
+        "root_fs": "read-only"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "absence is NOT evidence of restriction; assume no approval gate"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "screenapplicants",
+          "description": "Reviews job applications and filters out unsuitable candidates.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "hr-db-server1"
+          ]
+        },
+        {
+          "name": "notifycandidates",
+          "description": "Sends automated emails to candidates about their application status.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "hr-api-server"
+          ]
+        },
+        {
+          "name": "scheduleinterviews",
+          "description": "Schedules interviews for selected candidates.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "interview-scheduler-service"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

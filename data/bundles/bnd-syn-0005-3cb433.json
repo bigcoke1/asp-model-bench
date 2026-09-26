@@ -1,0 +1,321 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0005-3cb433",
+  "host_id": "host-e84d302e",
+  "sandbox_name": "dashboard-reader",
+  "collected_at": "2026-09-07T04:18:40Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 600
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "manufacturing-agent",
+        "RAIL_NAMESPACE": "manufacturing"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:8a7d31380d4a2fc121f220262ca4e0965f8c89529d2e336a7fa9d8c6745e8d45",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "crewai/0.86.0",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "text-davinci-003",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "https://api.openai.com/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": [
+        {
+          "name": "mcp-server-1",
+          "root": "/mnt/data",
+          "mode": "ro"
+        },
+        {
+          "name": "mcp-server-2",
+          "root": "/mnt/data",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "parsed .mcp.json"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server-1.manufacturing.svc:7443",
+          "sessions": 9,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-server-2.manufacturing.svc:7443",
+          "sessions": 6,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.dashboard.read",
+        "service.maintenance.order.create",
+        "bash.exec"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 600s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "sensor-monitoring-1",
+          "tls": true
+        },
+        {
+          "host": "maintenance-requests-2",
+          "tls": false
+        },
+        {
+          "host": "quality-assurance-3",
+          "tls": true
+        },
+        {
+          "host": "logistics-4",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "egress policy in the cluster API"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "maintenance-requests-2",
+          "tls": false,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "quality-assurance-3",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "logistics-4",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "api.openai.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "api.openai.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "MTLS_CERTIFICATE",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "a492…"
+        },
+        {
+          "name": "API_KEY",
+          "class": "mount",
+          "type": "api_key",
+          "shape": "sk-***",
+          "sha256": "64af…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "MTLS_CERTIFICATE": "baked",
+        "API_KEY": "baked"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "container inspect: no bind or volume mounts"
+    },
+    "workdir": {
+      "value": "/app/agent",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "1000:1000",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "ALL"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "absence is NOT evidence of restriction"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.dashboard.read",
+          "service.maintenance.order.create"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness sandbox block + container network mode"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "read-sensor-dashboard",
+          "description": "Gathers data from sensor dashboards and reports anomalies.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        },
+        {
+          "name": "file-maintenance-order",
+          "description": "Automates the creation of maintenance orders based on sensor readings.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "maintenance-requests-2",
+            "logistics-4"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

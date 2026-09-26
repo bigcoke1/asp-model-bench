@@ -2,7 +2,7 @@
 """Stock Laya vs Gemini vs qwen3:14b vs JevK5 (and Jev, when it answers) on the same ASP scoring questions.
 
 Five systems get the SAME text and the SAME question for each item:
-  - items: the asp-datagen pilot bundles, `identity` and `containment`, skipping any the coverage
+  - items: the bundles in data/ (asp-datagen pilot 1), `identity` and `containment`, skipping any the coverage
     profiler would mark INSUFFICIENT_EVIDENCE, plus one empty-state null control per category;
   - text: the bundle cut to the category's scope and rendered as English (asp_score.py
     --format prose --scope category), trimmed to fit Laya's 1024 tokens so Laya sees all of it;
@@ -12,17 +12,17 @@ Five systems get the SAME text and the SAME question for each item:
 A sixth, `gemini-prod`, is Gemini asked the way Rail Center's LLM profiler asks it: the whole
 bundle through rail-center's own `profiling.prompt.render_prompt` (v7), every category coverage
 clears in one call, scored 0-10. It never sees the empty-state control, because production never
-asks a model when coverage clears nothing.
+asks a model when coverage clears nothing. It needs a Rail Center checkout (RAILCENTER).
 
 Each system answers each item --runs times (default 3) and the median is its score. The LLMs run
 at temperature 0, as Rail Center's profiler calls its model; Laya and JevK5 generate nothing and
 read their answer from the model's probabilities.
 
 There is no ground truth, so the systems are compared on whether their scores follow the facts a
-bundle visibly shows (asp-datagen datagen/check.py), on the null control, and on how they rank
-the bundles relative to each other.
+bundle visibly shows (aspbench.data.facts), on the null control, and on how they rank the bundles
+relative to each other.
 
-Results go to bench_results.json: settings, every item with the exact text sent, every run, the
+Results go to results/bench_results.json: settings, every item with the exact text sent, every run, the
 medians, and the summary, so a later reader needs nothing but that file.
 
 Keys come from the environment: GOOGLE_API_KEY for Gemini; JEV_API_KEY (+ JEV_BASE_URL, JEV_MODEL)
@@ -31,9 +31,11 @@ for Jev. qwen3:14b is served by a local Ollama; JevK5 by a local llama-server (J
     llama-server --hf-repo alibiserikbay/JevK5-GGUF --hf-file jevk5-4b-v0.3-Q8_0.gguf \
         -c 8192 -ngl 99 --port 8093
 
-    python bench.py [--systems laya gemini gemini-prod qwen jevk5] [--runs 3]
-    python bench.py --systems gemini-prod --merge     # add one system to the existing results
-    python bench.py --report                          # print the tables from bench_results.json
+From the repo root (or through the Makefile: `make risk`, `make risk-report`):
+
+    python -m risk_detection.bench [--systems laya gemini gemini-prod qwen jevk5] [--runs 3]
+    python -m risk_detection.bench --systems gemini-prod --merge   # add one system, keep the rest
+    python -m risk_detection.bench --report                        # print the tables, no calls
 """
 from __future__ import annotations
 
@@ -47,34 +49,21 @@ import sys
 import time
 import urllib.error
 import urllib.parse
-import urllib.request
-import warnings
 from pathlib import Path
 
-import asp_score as A
+from aspbench.clients import GEMINI_OPENAI, jevk5_model, laya_agent, post
+from aspbench.data import BUNDLES, DATAGEN_COMMIT, bundles, coverage, facts, scenarios
+from risk_detection import asp_score as A
 
 HERE = Path(__file__).parent
-DATAGEN = Path("/Users/easonmeng/Desktop/asp-datagen")
-RAILCENTER = Path("/Users/easonmeng/workspace/rail-center-rc000")
-sys.path.insert(0, str(DATAGEN))
-from datagen.check import facts  # noqa: E402
-from datagen.contract import coverage  # noqa: E402
+RAILCENTER = Path(os.environ.get("RAILCENTER", Path.home() / "workspace/rail-center-rc000"))
 
 CATS = ["identity", "containment"]
 NULL_STATE = "(no evidence bundle)"
-GEMINI_OPENAI = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 
 
 class NotAsked(Exception):
     """This system never scores this item, by design rather than by failure."""
-
-
-def post(url: str, headers: dict, body: dict, timeout: int = 300) -> dict:
-    # A User-Agent of our own: thejevai.com's Cloudflare refuses Python's default one (error 1010).
-    req = urllib.request.Request(url, data=json.dumps(body).encode(),
-                                 headers={"Content-Type": "application/json", "User-Agent": "asp-bench/0.1", **headers})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read())
 
 
 def llm_prompt(state: str, cat: str) -> str:
@@ -155,7 +144,7 @@ class GeminiProd:
             raise NotAsked("production never asks a model when coverage clears nothing")
         key, fresh = (item["bundle_id"], run), (item["bundle_id"], run) not in self.replies
         if fresh:
-            b = self.bundle.model_validate_json((DATAGEN / f"data/bundles/{item['bundle_id']}.json").read_bytes())
+            b = self.bundle.model_validate_json((BUNDLES / f"{item['bundle_id']}.json").read_bytes())
             asked = [c for c, cov in self.cov(b).items() if cov.outcome is self.evaluable]
             p = self.render(b, asked, self.catalogue)
             t = time.perf_counter()
@@ -204,21 +193,11 @@ class JevK5:
     file's calibration temperature, are the answer, and the score is the expected level.
     """
     key, label = "jevk5", "JevK5"
-    FILE, SHA256 = "jevk5-4b-v0.3-Q8_0.gguf", "aea433883bc7ed399f2fbd539e53d2eac7caf71a946fe6650995a413979d4a30"
-    TEMPERATURE = 1.22  # this file's, from the JevK5-GGUF card; the client's docstring still says 1.367
 
     def __init__(self):
-        import jevk5
-        self.url = os.environ.get("JEVK5_URL", "http://127.0.0.1:8093")
-        with urllib.request.urlopen(self.url + "/props", timeout=30) as r:
-            props = json.loads(r.read())
-        if not props.get("model_path", "").endswith(self.FILE):
-            sys.exit(f"jevk5: {self.url} serves {props.get('model_path')}, not {self.FILE}")
-        self.model = jevk5.JevK5GGUF(self.url, temperature=self.TEMPERATURE)
+        self.model, settings = jevk5_model()
         self.name = "jevk5 (4b v0.3 Q8_0, llama.cpp)"
-        self.settings = {"checkpoint": f"alibiserikbay/JevK5-GGUF {self.FILE}", "sha256": self.SHA256,
-                         "client": f"jevk5 {jevk5.__version__}", "server": f"llama.cpp {props.get('build_info')}",
-                         "temperature": self.TEMPERATURE, "scale": "1-10", "input": "scoped prose + short question"}
+        self.settings = {**settings, "scale": "1-10", "input": "scoped prose + short question"}
 
     def __call__(self, item, run):
         a = self.model.decide(item["state"], A.question(item["category"]))
@@ -248,10 +227,10 @@ class Jev:
 # --- items ---
 
 def items(agent):
-    scen = {r["bundle_id"]: r for r in map(json.loads, (DATAGEN / "data/scenarios.jsonl").open())}
+    scen, bs = scenarios(), bundles()
     out = []
     for bid, rec in scen.items():
-        b = json.loads((DATAGEN / f"data/bundles/{bid}.json").read_text())
+        b = bs[bid]
         f = facts(rec["scenario"], b)
         for cat in CATS:
             if coverage(b, cat):
@@ -410,18 +389,21 @@ def main():
                     choices=["laya", "gemini", "gemini-prod", "qwen", "jevk5", "jev"])
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
-    ap.add_argument("--out", default=str(HERE / "bench_results.json"))
+    ap.add_argument("--out", default=str(HERE / "results/bench_results.json"))
     ap.add_argument("--merge", action="store_true", help="keep results already in --out for systems not run now")
     ap.add_argument("--report", action="store_true", help="print the tables from --out without running anything")
+    ap.add_argument("--check", action="store_true", help="rebuild the inputs and confirm they match --out, no model calls")
     args = ap.parse_args()
     if args.report:
         print(table(json.loads(Path(args.out).read_text())))
         return
 
-    warnings.filterwarnings("ignore")
-    import laya
-    agent = laya.load(*laya.DEFAULT_MODELS["typed-decisions"][:1], subfolder="typed-decisions")
+    agent = laya_agent()
     its = items(agent)
+    if args.check:
+        same = its == json.loads(Path(args.out).read_text())["items"]
+        print("risk inputs: match the stored results" if same else "risk inputs: DIFFER from the stored results")
+        sys.exit(0 if same else 1)
     make = {"laya": lambda: Laya(agent), "gemini": lambda: Gemini(args.gemini_model),
             "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "jevk5": JevK5, "jev": Jev}
     systems = [make[k]() for k in args.systems]
@@ -466,8 +448,10 @@ def main():
                              **({"not_asked": note} if note else {}), **extra})
                 print(f"  {sysm.name} {n + 1}/{len(its)}", end="\r", flush=True)
             results[sysm.name], status[sysm.name] = rows, "ok"
-        except urllib.error.HTTPError as e:
-            status[sysm.name] = f"not run: HTTP {e.code} {e.read()[:200].decode(errors='replace')}"
+        except urllib.error.URLError as e:  # an HTTP error, or nothing listening (Ollama not started)
+            detail = (f"HTTP {e.code} {e.read()[:200].decode(errors='replace')}"
+                      if isinstance(e, urllib.error.HTTPError) else str(e.reason))
+            status[sysm.name] = f"not run: {detail}"
         settings[sysm.name] = {"label": sysm.label, **sysm.settings}
         print(f"{sysm.name}: {status[sysm.name]}          ", flush=True)
 
@@ -479,8 +463,7 @@ def main():
             "scale": "1-10, 10 safest (Laya level i = score i+1), except systems whose settings say 0-10",
             "question": {c: A.question(c) for c in CATS},
             "input": "asp-datagen pilot bundles, scoped to the category, rendered as prose, fit to Laya's 1024 tokens",
-            "asp_datagen_commit": subprocess.run(["git", "-C", str(DATAGEN), "rev-parse", "--short", "HEAD"],
-                                                 capture_output=True, text=True).stdout.strip(),
+            "asp_datagen_commit": DATAGEN_COMMIT,  # the bundles in data/ were copied from this commit
             "systems": settings, "status": status,
         },
         "items": its,

@@ -1,0 +1,262 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0009-8c8243",
+  "host_id": "host-1c0d6104",
+  "sandbox_name": "hr-screening-bot",
+  "collected_at": "2026-09-17T13:07:42Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "hr-screening-deployment",
+        "RAIL_NAMESPACE": "hr-screening-namespace"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:8f17d035643339b95a6a79379a6dc1683fb32035821af33e1ca52132aa833c5c",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "UNKNOWN_HARNESS",
+      "note": "fingerprint: python3.12 + uvicorn + an agent loop in /app/main.py"
+    },
+    "framework_identity": {
+      "value": "fastapi/0.115.6",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "gpt-3.5-turbo",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://llm-gw.hr-screening-namespace.svc:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp1-company-com.hr-screening-namespace.svc:7443",
+          "sessions": 9,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp2-company-com.hr-screening-namespace.svc:7443",
+          "sessions": 1,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.application.screen"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "db.company.com",
+          "tls": false
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "hosts in harness config; hosts built in code are not visible"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "api.interview-scheduler.com",
+          "tls": true,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "llm-gw.hr-screening-namespace.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED",
+      "note": "declared side is a floor, so the difference would overcount"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "TOKEN_HR_APP",
+          "class": "mount",
+          "type": "token",
+          "shape": "ghp_***",
+          "sha256": "455f…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "baked-vs-injected needs image and runtime together"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "method": "container inspect: no bind or volume mounts"
+    },
+    "workdir": {
+      "value": "/app/hr-screening",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "root",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": true,
+        "caps": [
+          "NET_BIND_SERVICE"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect HostConfig"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE",
+      "note": "absence is NOT evidence of restriction"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.application.screen"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "egress allow-list: db.company.com, api.interview-scheduler.com, mail.smtp.company.com",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness sandbox block"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "screen-applications",
+          "description": "Automatically screens job applications based on predefined criteria.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

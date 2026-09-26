@@ -1,0 +1,339 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0015-369ada.v1",
+  "host_id": "host-6cb9371b",
+  "sandbox_name": "ai-it-support",
+  "collected_at": "2026-09-29T19:23:29Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "ai-it-support-namespace",
+        "com.docker.compose.service": "ai-it-support-deployment"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:e9076ca648e03693d5f86ddf5abcb258ba26783aa3805b54d962147957e2d34a",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "openclaw/1.8.2",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "langgraph/v0.2.61",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "vinai/phoenix-llm-13b",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://LLM-GW.AI-IT-SUPPORT-NAMESPACE.SVC:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": [
+        {
+          "name": "mcp-openclaw-svc",
+          "root": "/opt/data/ai-it-support",
+          "mode": "rw"
+        },
+        {
+          "name": "backup-mcp-openclaw-svc",
+          "root": "/opt/data/ai-it-support",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "parsed .mcp.json"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-openclaw-svc.ai-it-support-namespace.svc:7443",
+          "sessions": 8,
+          "transport": "http"
+        },
+        {
+          "endpoint": "backup-mcp-openclaw-svc.ai-it-support-namespace.svc:7443",
+          "sessions": 7,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "openclaw.user. unlock"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "it-support.openclaw.svc",
+          "tls": true
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "hosts in harness config; hosts built in code are not visible"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "account-mgt.openclaw.svc",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "ticketing.openclaw.svc",
+          "tls": false,
+          "peer_guess": "external"
+        },
+        {
+          "host": "llm-gw.ai-it-support-namespace.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "clinical-system.example.com",
+          "tls": true,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED",
+      "note": "declared side is a floor, so the difference would overcount"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "SAAS_PASSWORD",
+          "class": "secret_plaintext",
+          "type": "saas",
+          "shape": "atat-***",
+          "sha256": "f7be…"
+        },
+        {
+          "name": "API_KEY",
+          "class": "secret_ref",
+          "type": "api_key",
+          "shape": "sk-***",
+          "sha256": "5249…"
+        },
+        {
+          "name": "MTLS_CERT",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "9630…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": {
+        "SAAS_PASSWORD": "baked",
+        "API_KEY": "baked",
+        "MTLS_CERT": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "target": "/var/run/secrets/kubernetes.io/serviceaccount",
+          "mode": "ro"
+        },
+        {
+          "source": "/var/run/docker.sock",
+          "target": "/var/run/docker.sock",
+          "mode": "rw"
+        },
+        {
+          "source": "/run/secrets/ai-it-support",
+          "target": "/run/secrets",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect"
+    },
+    "workdir": {
+      "value": "/opt/ai-it-support",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": true,
+        "caps": [
+          "NET_BIND_SERVICE",
+          "SYS_ADMIN"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container inspect HostConfig"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": false
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "openclaw.user. unlock"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "account-unlock",
+          "description": "Handles user account unlock requests and resets passwords.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "it-support.openclaw.svc"
+          ]
+        },
+        {
+          "name": "access-request",
+          "description": "Processes access requests and approves/rejects based on policy.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "account-mgt.openclaw.svc"
+          ]
+        },
+        {
+          "name": "ticket-closure",
+          "description": "Closes support tickets and sends follow-up emails to users.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "ticketing.openclaw.svc"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

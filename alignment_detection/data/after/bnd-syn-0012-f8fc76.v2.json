@@ -1,0 +1,294 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0012-f8fc76.v2",
+  "host_id": "host-d5cd9788",
+  "sandbox_name": "soc-enrichment",
+  "collected_at": "2026-09-26T05:36:36Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1800
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no key of the set in container environment or labels"
+    },
+    "image_digest": {
+      "value": "sha256:0ac067c6ee2e6d2e6dd929c7cb17053d4dfed2a5c354bdb890ac81f863e91991",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": "autogen/0.4.7",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "image labels + package manifest"
+    },
+    "framework_identity": {
+      "value": "autogen-agentchat/0.4.7",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "openai/davinci",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "https://api.openai.com/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-internal-01-corp-local.soc.svc:7443",
+          "sessions": 7,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-internal-02-corp-local.soc.svc:7443",
+          "sessions": 7,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.scanner.ip-lookup",
+        "service.database.malware-signature",
+        "service.network.dns-lookup",
+        "service.security.exploit-db"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1800s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "malware-analysis-01.corp.local",
+          "tls": true
+        },
+        {
+          "host": "network-security-02.corp.local",
+          "tls": true
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "egress policy in the cluster API"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "api.openai.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "network-security-02.corp.local",
+          "tls": true,
+          "peer_guess": "data_service"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": [
+        {
+          "host": "api.openai.com",
+          "tls": true,
+          "peer_guess": "external"
+        },
+        {
+          "host": "maintenance-api.manufacturing.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "SOC_DB_CREDENTIALS",
+          "class": "secret_ref",
+          "type": "db",
+          "shape": "postgres://***",
+          "sha256": "008a…"
+        },
+        {
+          "name": "MTLS_CERT",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "b2b0…"
+        },
+        {
+          "name": "API_KEY_SERVICE",
+          "class": "secret_ref",
+          "type": "api_key",
+          "shape": "sk-***",
+          "sha256": "7a1d…"
+        },
+        {
+          "name": "MTLS_KEY",
+          "class": "secret_plaintext",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "ae2f…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "only name, class and hash; values are never read"
+    },
+    "credential_provenance": {
+      "value": {
+        "SOC_DB_CREDENTIALS": "injected",
+        "MTLS_CERT": "injected",
+        "API_KEY_SERVICE": "injected",
+        "MTLS_KEY": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/run/secrets/soc-enrichment",
+          "target": "/run/secrets",
+          "mode": "ro"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod spec volumeMounts, read from the cluster API"
+    },
+    "workdir": {
+      "value": "/app/soc/enrichment",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "0",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": false,
+        "caps": [
+          "SYS_ADMIN"
+        ],
+        "root_fs": "read-write"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": false
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "checked harness config for allow/deny lists"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "status": "BLIND",
+      "tier": "observed",
+      "value": null,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "declared",
+      "method": "no SKILL.md or skills config found"
+    }
+  }
+}

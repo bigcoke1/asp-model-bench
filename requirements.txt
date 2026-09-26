@@ -4,6 +4,6 @@ laya @ git+https://github.com/NandhaKishorM/laya@010bacef009c855ccba814b51f7c8e1
 # JevK5's client, v0.3.3 pinned to the commit. Its llama.cpp path uses only the standard library;
 # the torch and transformers it declares are Laya's already. The model runs in llama-server.
 jevk5 @ git+https://github.com/allebee/jevk5@f944fe37ff1d5ed3830aa4c8d88b7189c8c1268a
-# bench.py's production-prompt column imports rail-center's profiling package, which needs these.
+# risk_detection's production-prompt column (gemini-prod) imports Rail Center's profiling package, which needs these.
 pydantic>=2.10
 pyyaml>=6.0

@@ -1,0 +1,270 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0007-9ae1ac.v2",
+  "host_id": "host-ea269cca",
+  "sandbox_name": "ledger-reconciler",
+  "collected_at": "2026-09-17T01:17:43Z",
+  "rule_pack_version": 15,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 1320
+    },
+    "image": {
+      "attempted": true,
+      "reached": true
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": true
+    },
+    "repo": {
+      "attempted": true,
+      "reached": true
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "RAIL_DEPLOYMENT": "ledger-reconciler-deployment",
+        "RAIL_NAMESPACE": "finance-operations"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container environment"
+    },
+    "image_digest": {
+      "value": "sha256:d216a78f9637cc9b1900da6bfbee08d320f4fb4d9069b95da4eb44d53b08de34",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "UNKNOWN_HARNESS",
+      "note": "fingerprint: python3.12 + uvicorn + an agent loop in /app/main.py"
+    },
+    "framework_identity": {
+      "value": "fastapi/0.115.6",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "custom-llm-3241",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": "http://llm-gw.finance-operations.svc:8080/v1",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "empty because the gateway holds the list, NOT because there are none. Lower bound is >= 1, not 0."
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-gw.internal:7443",
+          "sessions": 9,
+          "transport": "http"
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "reason": "GATEWAY_MANAGED",
+      "note": "sessions to the gateway; upstream servers are not distinguishable"
+    },
+    "tool_names": {
+      "value": [
+        "service.banking.api.query",
+        "service.notification.email.send"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 1320s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "nothing produces it yet"
+    },
+    "declared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "observed_destinations": {
+      "value": [
+        {
+          "host": "llm-gw.finance-operations.svc",
+          "tls": false,
+          "peer_guess": "data_service"
+        },
+        {
+          "host": "banking-api.example.com",
+          "tls": true,
+          "peer_guess": "external"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "NOT COMPUTABLE: declared side is blind"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "sha256": "5a96…",
+          "shape": "pem",
+          "type": "mtls",
+          "class": "mount",
+          "name": "GW_CLIENT_CERT"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "gateway-fronted: the agent holds one gateway credential; upstream credentials sit in the gateway"
+    },
+    "credential_provenance": {
+      "value": {
+        "GW_CLIENT_CERT": "injected"
+      },
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "image layers diffed against runtime env"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "ABSENT",
+      "tier": "observed",
+      "reason": "SOURCE_OK_NOT_PRESENT",
+      "method": "walked every image layer for deleted secret files"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/",
+          "target": "/host",
+          "mode": "read-write"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod spec volumeMounts, read from the cluster API"
+    },
+    "workdir": {
+      "value": "/app/ledger_reconciler",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "node",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": {
+        "privileged": true,
+        "caps": [
+          "ALL"
+        ],
+        "root_fs": "read-only"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "pod securityContext, read from the cluster API"
+    },
+    "approval_policy": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED",
+      "note": "absence is NOT evidence of restriction; assume no approval gate"
+    },
+    "tool_allow_deny": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "GATEWAY_MANAGED"
+    },
+    "sandbox_network_policy": {
+      "value": "egress allow-list: banking-api.example.com",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness sandbox block"
+    },
+    "system_prompt_present": {
+      "value": true,
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "subject",
+      "note": "presence only"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "match-transactions",
+          "description": "Automatically match transactions in the ledger with bank statements.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        },
+        {
+          "name": "resolve-discrepancies",
+          "description": "Manually resolve any discrepancies found between the ledger and bank statements.",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "banking-api.example.com"
+          ]
+        },
+        {
+          "name": "log-discrepancies",
+          "description": "Log any discrepancies that cannot be resolved to the system's log files.",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "bundle_version": 1,
+  "bundle_id": "bnd-syn-0016-5a2d93.v2",
+  "host_id": "host-e451b945",
+  "sandbox_name": "healthcare-summ-ai",
+  "collected_at": "2026-10-04T14:57:50Z",
+  "rule_pack_version": 14,
+  "inputs_attempted": {
+    "runtime": {
+      "attempted": true,
+      "reached": true,
+      "window_seconds": 900
+    },
+    "image": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "manifest": {
+      "attempted": true,
+      "reached": false,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "repo": {
+      "attempted": false,
+      "reason": "NOT_FIRST_PARTY"
+    }
+  },
+  "attributes": {
+    "deployment": {
+      "value": {
+        "com.docker.compose.project": "healthcare-summ-ai-ns",
+        "com.docker.compose.service": "healthcare-summ-ai-deployment"
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "platform",
+      "method": "container labels"
+    },
+    "image_digest": {
+      "value": "sha256:bf257edeabffaea0cd277dabb734f74c34b27ed05c6f66fa763b06f41382a67e",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "harness_identity": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "interrogated",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no version endpoint answered"
+    },
+    "framework_identity": {
+      "value": "node/v24.20.1",
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "package manifest"
+    },
+    "model_name": {
+      "value": "custom-llm-v2",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "inference_endpoint": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "no model traffic in the 900s window"
+    },
+    "mcp_servers_declared": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "PRIVATE_STORE"
+    },
+    "mcp_servers_observed": {
+      "value": [
+        {
+          "endpoint": "mcp-server2-example-com.healthcare-summ-ai-ns.svc:7443",
+          "sessions": 1,
+          "transport": "http"
+        },
+        {
+          "endpoint": "mcp-server1-example-com.healthcare-summ-ai-ns.svc:7443",
+          "sessions": 7,
+          "transport": "http"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "tool_names": {
+      "value": [
+        "service.patient-intake.metadata-extract",
+        "service.patient-intake.summary-generate",
+        "service.patient-intake.nlp-process",
+        "service.patient-intake.doc-format"
+      ],
+      "status": "PARTIAL",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "JSON-RPC frames seen during a 900s window",
+      "note": "floor, not a count; tools not exercised in the window are absent here"
+    },
+    "tool_capability_envelope": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NOT_FIRST_PARTY",
+      "note": "repo AST only (context E)"
+    },
+    "declared_destinations": {
+      "value": [
+        {
+          "host": "clinical-system.example.com",
+          "tls": true
+        }
+      ],
+      "status": "PARTIAL",
+      "tier": "declared",
+      "authored_by": "subject",
+      "reason": "CODE_CONSTRUCTED",
+      "method": "hosts in harness config; hosts built in code are not visible"
+    },
+    "observed_destinations": {
+      "status": "BLIND",
+      "tier": "observed",
+      "value": null,
+      "reason": "NO_SOURCE_ACCESS"
+    },
+    "undeclared_destinations": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "CODE_CONSTRUCTED",
+      "note": "declared side is a floor, so the difference would overcount"
+    },
+    "credential_inventory": {
+      "value": [
+        {
+          "name": "MTLS_CERTIFICATE_PATH",
+          "class": "mount",
+          "type": "mtls",
+          "shape": "pem",
+          "sha256": "b92b…"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "note": "name + class + hash only; values never collected"
+    },
+    "credential_provenance": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "declared",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "baked-vs-injected needs image and runtime together"
+    },
+    "in_layer_deleted_secrets": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NO_SOURCE_ACCESS",
+      "note": "static-only; runtime cannot see image layers"
+    },
+    "mounts": {
+      "value": [
+        {
+          "source": "/data/patient-forms",
+          "target": "/data",
+          "mode": "ro"
+        },
+        {
+          "source": "/var/run/docker.sock",
+          "target": "/var/run/docker.sock",
+          "mode": "rw"
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "read with container inspect"
+    },
+    "workdir": {
+      "value": "/healthcare/summation/",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "user": {
+      "value": "1000:1000",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none"
+    },
+    "permissions": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK",
+      "note": "privileged flag / Linux caps are P1; pack 14 has no collector"
+    },
+    "approval_policy": {
+      "value": {
+        "destructive_requires_approval": true
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "tool_allow_deny": {
+      "value": {
+        "allow": [
+          "service.patient-intake.form-analyze",
+          "service.patient-intake.metadata-extract",
+          "service.patient-intake.summary-generate",
+          "service.patient-intake.nlp-process",
+          "service.patient-intake.doc-format",
+          "service.patient-intake.email-send"
+        ],
+        "deny": []
+      },
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "harness config"
+    },
+    "sandbox_network_policy": {
+      "value": "default: allow all egress",
+      "status": "ANSWERED",
+      "tier": "observed",
+      "authored_by": "none",
+      "method": "container network mode"
+    },
+    "system_prompt_present": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "system_prompt_text": {
+      "value": null,
+      "status": "BLIND",
+      "tier": "observed",
+      "reason": "NOT_COLLECTED_BY_PACK"
+    },
+    "skills_inventory": {
+      "value": [
+        {
+          "name": "intake-form-summary",
+          "description": "Summarizes patient intake forms for quick review by clinicians",
+          "source_type": "skills_config",
+          "destination_endpoints": []
+        },
+        {
+          "name": "patient-profile-update",
+          "description": "Updates patient profiles with summarized intake form information",
+          "source_type": "skills_config",
+          "destination_endpoints": [
+            "clinical-system.example.com"
+          ]
+        }
+      ],
+      "status": "ANSWERED",
+      "tier": "declared",
+      "authored_by": "subject",
+      "method": "SKILL.md frontmatter; skills constructed in code are not visible"
+    }
+  }
+}
