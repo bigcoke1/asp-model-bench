@@ -36,7 +36,7 @@ import time
 import urllib.error
 from pathlib import Path
 
-from aspbench.clients import gemini_json, jevk5_model, laya_agent, ollama_json
+from aspbench.clients import gemini_json, jevk5_model, laya_agent, ollama_json, openrouter_json
 from aspbench.data import DATAGEN_COMMIT, bundles
 
 HERE = Path(__file__).parent
@@ -148,6 +148,39 @@ class Qwen32(Qwen):
 
     def __init__(self):
         super().__init__("qwen3:32b")
+
+
+class OpenWeightAPI:
+    """An open-weight model too big to run here, through OpenRouter on one pinned provider:
+    temperature 0, reasoning off, JSON output, the same prompt as qwen3 and Gemini."""
+    model = provider = None
+    temperature = 0
+
+    def __init__(self):
+        self.name = f"{self.model} (openrouter: {self.provider})"
+        self.settings = {"model": self.model, "provider": self.provider, "temperature": self.temperature,
+                         "reasoning": False, "output": "JSON", "server": "openrouter"}
+
+    def __call__(self, item, run):
+        r = openrouter_json(self.model, self.provider, [{"role": "user", "content": llm_prompt(item["state"])}])
+        d = r.get("drift") if isinstance(r, dict) else None
+        return {"misaligned": d if isinstance(d, bool) else None}
+
+
+class DeepSeekPro(OpenWeightAPI):
+    key, label = "deepseek-pro", "DeepSeek V4 Pro"
+    model, provider = "deepseek/deepseek-v4-pro-0813", "parasail/fp8"  # fp8 as released; DeepSeek's own endpoint may train on prompts
+
+
+class DeepSeekFlash(OpenWeightAPI):
+    key, label = "deepseek-flash", "DeepSeek V4 Flash"
+    model, provider = "deepseek/deepseek-v4-flash", "parasail/fp8"  # fp8 as released; DeepSeek does not serve it here
+
+
+class KimiK3(OpenWeightAPI):
+    key, label = "kimi-k3", "Kimi K3"
+    model, provider = "moonshotai/kimi-k3", "moonshotai/mxfp4"  # Moonshot's own servers, 4-bit as released
+    temperature = "Moonshot's default: its endpoint takes no temperature"
 
 
 class Gemini:
@@ -266,7 +299,7 @@ def table(doc) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--systems", nargs="+", default=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "gemini"],
-                    choices=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "qwen32b", "gemini"])
+                    choices=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "qwen32b", "gemini", *["deepseek-pro", "deepseek-flash", "kimi-k3"]])
     ap.add_argument("--runs", type=int, default=1)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
     ap.add_argument("--out", default=str(HERE / "results/alignment_results.json"))
@@ -285,7 +318,8 @@ def main():
         print("alignment inputs: match the stored results" if same else "alignment inputs: DIFFER from the stored results")
         raise SystemExit(0 if same else 1)
     make = {"exact-diff": ExactDiff, "normalized-diff": NormalizedDiff, "laya": lambda: Laya(laya_agent()),
-            "jevk5": JevK5, "qwen": Qwen, "qwen32b": Qwen32, "gemini": lambda: Gemini(args.gemini_model)}
+            "jevk5": JevK5, "qwen": Qwen, "qwen32b": Qwen32, "gemini": lambda: Gemini(args.gemini_model),
+            "deepseek-pro": DeepSeekPro, "deepseek-flash": DeepSeekFlash, "kimi-k3": KimiK3}
     systems = [make[k]() for k in args.systems]
     results, status, settings = {}, {}, {}
     if args.merge and Path(args.out).exists():

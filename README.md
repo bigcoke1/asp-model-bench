@@ -13,7 +13,10 @@ Benchmarks for the models behind **agent security profiling (ASP)**. Each task a
 |---|---|---|---|
 | Gemini, Rail Center's production prompt | Google API | ✓ **4 of 4** asked | – not run; the prompt is written for risk |
 | Gemini, short prompt | Google API | ~ 4 of 5; the fifth only weakly | ✓ **0.93** |
-| qwen3:32b (open) | Mac mini (48 GB), Ollama | ~ 2 of 5 | ✓ **0.96**, best |
+| Kimi K3 (open, 2.8T) | OpenRouter, on Moonshot's servers | ~ 4 of 5 | ✓ **1.00** (0.996), best |
+| DeepSeek V4 Pro (open, 1.6T) | OpenRouter, on Parasail | ~ 2 of 5, two more weakly | ✓ **0.97** |
+| DeepSeek V4 Flash (open, 284B) | OpenRouter, on Parasail | ~ 2 of 5 | ~ **0.87**, no better than normalized diff |
+| qwen3:32b (open) | Mac mini (48 GB), Ollama | ~ 2 of 5 | ✓ **0.96** |
 | qwen3:14b (open) | this laptop, Ollama | ~ 3 of 5 | ✓ **0.95** |
 | JevK5 (open, 4B) | this laptop, llama.cpp | ~ 3 of 5 | ✓ **0.90** |
 | stock Laya (open, 0.4B) | this laptop, CPU | ✗ **0 of 5** | ✗ **0.38**, worse than a text diff |
@@ -23,7 +26,9 @@ Benchmarks for the models behind **agent security profiling (ASP)**. Each task a
 The model is `gemini-3.5-flash-lite` in both Gemini rows.
 
 - **For risk detection, use Gemini with Rail Center's production prompt.** It is the only system that passes every risk check.
-- **For alignment detection, qwen3:32b, qwen3:14b, Gemini and JevK5 are all good (F1 0.90–0.96).** The two Qwen models are best and run locally, and qwen3:14b fits a 16 GB laptop. All four catch nearly every real change. Their mistakes are mostly false alarms on equivalent notation, such as `root` written as `0`.
+- **For alignment detection, Kimi K3 is nearly perfect (F1 0.996), and DeepSeek V4 Pro, both Qwen models, Gemini and JevK5 are all good (0.90–0.97).** Of the models that run locally, the two Qwens are best, and qwen3:14b fits a 16 GB laptop. The good models catch nearly every real change; their mistakes are mostly false alarms on equivalent notation, such as `root` written as `0`, which only Kimi K3 gets right.
+- **Kimi K3 is the best open model on both tasks, but it runs only hosted (2.8T parameters).** On risk it passes 4 of 5 checks with the short prompt, as many as Gemini with it. Like both Qwens and both DeepSeeks, it scores empty input a perfect 10, and its runs vary more than any other system's: Moonshot's endpoint takes no temperature.
+- **DeepSeek V4 Pro is close behind on alignment (0.97) but middling on risk;** V4 Flash, the cheap tier, is no better than the rules baseline on alignment.
 - **A bigger Qwen barely helps, and on risk it does worse.** qwen3:32b scores 0.96 on alignment to qwen3:14b's 0.95, but passes one risk check fewer: its containment scores do not move with host reach.
 - **JevK5 is the lightest model that does well (4B, local).** It is good on alignment. On risk it follows credentials and host reach, but it scores empty input as safe, and neither privileged, root agent scores 2 or below; one scores 6.3.
 - **Stock Laya is not usable for either task.** On alignment, its probabilities rank misaligned attributes no better than chance (AUROC 0.52). On risk, every score lands near 5.
@@ -43,6 +48,7 @@ You need Python 3.12 and `make`. Each model has its own extra requirement:
 | Gemini | `GOOGLE_API_KEY` in the environment | about 4 minutes for alignment |
 | qwen3:14b | [Ollama](https://ollama.com): `make models`, then `ollama serve` | about 25–35 minutes for alignment |
 | qwen3:32b | Ollama, `ollama pull qwen3:32b` (20 GB), and a Mac with 32 GB or more: it takes 22 GB of GPU memory | too big for this laptop; on a Mac mini (M4 Pro, 48 GB), about 16 minutes for alignment and 4 for risk |
+| DeepSeek V4 Pro, DeepSeek V4 Flash, Kimi K3 | `OPENROUTER_API_KEY` in the environment; all three on both tasks cost $0.79 | alignment: about 20, 6 and 26 minutes; risk: about 4, 1 and 12 |
 | JevK5 | [llama.cpp](https://github.com/ggml-org/llama.cpp) (`brew install llama.cpp`): `make models`, then `make serve-jevk5` | about 16 minutes for alignment |
 | Gemini, production prompt (risk only) | a Rail Center checkout, at `RAILCENTER` (default `~/workspace/rail-center-rc000`) | about 2 minutes |
 
@@ -62,10 +68,13 @@ make risk            # laya, gemini, qwen and jevk5 on risk detection, 3 runs ea
 make alignment SYSTEMS="laya gemini" RUNS=3   # some systems; the others' stored results are kept
 make alignment SYSTEMS=qwen32b  # qwen3:32b, only by name: it needs 32 GB or more
 make risk SYSTEMS=qwen32b
+export OPENROUTER_API_KEY=...
+make alignment SYSTEMS="deepseek-pro deepseek-flash kimi-k3"   # hosted, through OpenRouter
+make risk SYSTEMS="deepseek-pro deepseek-flash kimi-k3"
 ```
 
 - **Missing servers or keys:** a system whose server or key is missing is recorded as "not run", and the rest carry on.
-- **Memory:** qwen3:14b and JevK5 together need about 14 GB. On a 16 GB machine, stop one server before running the other. qwen3:32b needs about 22 GB on its own, so `make alignment` and `make risk` run it only when asked for by name: a run that cannot reach a system drops that system's stored results. `make help` lists every target.
+- **Memory:** qwen3:14b and JevK5 together need about 14 GB. On a 16 GB machine, stop one server before running the other. qwen3:32b needs about 22 GB on its own, so `make alignment` and `make risk` run it only when asked for by name, and the same goes for the three OpenRouter models: a run that cannot reach a system drops that system's stored results. `make help` lists every target.
 
 ## Layout
 

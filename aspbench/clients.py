@@ -1,13 +1,16 @@
-"""How each benchmark reaches its models: HTTP for Gemini, Ollama and llama-server; Laya in-process."""
+"""How each benchmark reaches its models: HTTP for Gemini, OpenRouter, Ollama and llama-server; Laya in-process."""
 from __future__ import annotations
 
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.request
 import warnings
 
 GEMINI_OPENAI = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+OPENROUTER = "https://openrouter.ai/api/v1/chat/completions"
 OLLAMA = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 JEVK5_URL = os.environ.get("JEVK5_URL", "http://127.0.0.1:8093")
 JEVK5_FILE = "jevk5-4b-v0.3-Q8_0.gguf"
@@ -28,6 +31,27 @@ def gemini_json(model: str, messages: list[dict]) -> dict | None:
     0, JSON output. The parsed reply, or None when it is not JSON."""
     r = post(GEMINI_OPENAI, {"Authorization": f"Bearer {os.environ.get('GOOGLE_API_KEY')}"},
              {"model": model, "temperature": 0, "response_format": {"type": "json_object"}, "messages": messages})
+    try:
+        return json.loads(r["choices"][0]["message"]["content"])
+    except (KeyError, TypeError, json.JSONDecodeError):
+        return None
+
+
+def openrouter_json(model: str, provider: str, messages: list[dict]) -> dict | None:
+    """One call to an open-weight model through OpenRouter, on the one provider named (an endpoint
+    tag such as "deepseek" or "deepinfra/fp8"), never a fallback: temperature 0, reasoning off, JSON
+    output. Rate limits and server errors are retried, so one busy moment does not end a run. The
+    parsed reply, or None when it is not JSON."""
+    body = {"model": model, "temperature": 0, "response_format": {"type": "json_object"}, "messages": messages,
+            "reasoning": {"enabled": False}, "provider": {"only": [provider], "allow_fallbacks": False}}
+    for wait in (2, 4, 8, 16, 32, None):
+        try:
+            r = post(OPENROUTER, {"Authorization": f"Bearer {os.environ.get('OPENROUTER_API_KEY')}"}, body)
+            break
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 502, 503, 504) or wait is None:
+                raise
+            time.sleep(wait)
     try:
         return json.loads(r["choices"][0]["message"]["content"])
     except (KeyError, TypeError, json.JSONDecodeError):

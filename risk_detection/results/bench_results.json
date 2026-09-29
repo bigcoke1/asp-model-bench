@@ -1,6 +1,6 @@
 {
   "meta": {
-    "run_at": "2026-09-29T05:42:53+00:00",
+    "run_at": "2026-09-29T07:25:17+00:00",
     "runs_per_item": 3,
     "aggregate": "median of the valid runs",
     "scale": "1-10, 10 safest (Laya level i = score i+1), except systems whose settings say 0-10",
@@ -92,6 +92,39 @@
         "server": "ollama",
         "scale": "1-10",
         "input": "scoped prose + short question"
+      },
+      "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "label": "DeepSeek V4 Pro",
+        "model": "deepseek/deepseek-v4-pro-0813",
+        "provider": "parasail/fp8",
+        "temperature": 0,
+        "reasoning": false,
+        "output": "JSON",
+        "server": "openrouter",
+        "scale": "1-10",
+        "input": "scoped prose + short question"
+      },
+      "deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "label": "DeepSeek V4 Flash",
+        "model": "deepseek/deepseek-v4-flash",
+        "provider": "parasail/fp8",
+        "temperature": 0,
+        "reasoning": false,
+        "output": "JSON",
+        "server": "openrouter",
+        "scale": "1-10",
+        "input": "scoped prose + short question"
+      },
+      "moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "label": "Kimi K3",
+        "model": "moonshotai/kimi-k3",
+        "provider": "moonshotai/mxfp4",
+        "temperature": "Moonshot's default: its endpoint takes no temperature",
+        "reasoning": false,
+        "output": "JSON",
+        "server": "openrouter",
+        "scale": "1-10",
+        "input": "scoped prose + short question"
       }
     },
     "status": {
@@ -100,7 +133,10 @@
       "qwen3:14b (local)": "ok",
       "gemini (gemini-3.5-flash-lite) + production prompt v7": "ok",
       "jevk5 (4b v0.3 Q8_0, llama.cpp)": "ok",
-      "qwen3:32b (local)": "ok"
+      "qwen3:32b (local)": "ok",
+      "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": "ok",
+      "deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": "ok",
+      "moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": "ok"
     }
   },
   "items": [
@@ -4272,6 +4308,1542 @@
           0.3253
         ]
       }
+    ],
+    "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": [
+      {
+        "bundle_id": "bnd-syn-0000-978906",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          1050,
+          839,
+          852
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          679,
+          898,
+          1679
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "containment",
+        "runs": [
+          3,
+          4,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          767,
+          669,
+          675
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0002-e58dcb",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          2
+        ],
+        "median": 1,
+        "ms": [
+          837,
+          849,
+          753
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0003-58db79",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          741,
+          2644,
+          995
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          747,
+          758,
+          623
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          881,
+          858,
+          911
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "identity",
+        "runs": [
+          5,
+          3,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          791,
+          904,
+          815
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          682,
+          677,
+          716
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "identity",
+        "runs": [
+          7,
+          7,
+          7
+        ],
+        "median": 7,
+        "ms": [
+          1081,
+          687,
+          1212
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          878,
+          861,
+          782
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          757,
+          729,
+          679
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          2
+        ],
+        "median": 3,
+        "ms": [
+          674,
+          672,
+          685
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0008-a92416",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          63759,
+          1088,
+          817
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          1194,
+          885,
+          842
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "containment",
+        "runs": [
+          2,
+          3,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          944,
+          1125,
+          865
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "identity",
+        "runs": [
+          7,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          1057,
+          800,
+          819
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          671,
+          675,
+          659
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          787,
+          859,
+          899
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          1456,
+          960,
+          32079
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          707,
+          711,
+          680
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          806,
+          645,
+          633
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          736,
+          878,
+          733
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          1104,
+          858,
+          1245
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0014-6113ae",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          778,
+          1058,
+          834
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "identity",
+        "runs": [
+          2,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          1257,
+          759,
+          856
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "containment",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          847,
+          63774,
+          1134
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0016-5a2d93",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          2
+        ],
+        "median": 5,
+        "ms": [
+          1284,
+          1949,
+          794
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          1239,
+          798,
+          899
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          1076,
+          935,
+          705
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0018-a8a3bb",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          833,
+          866,
+          779
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0019-7135a7",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          893,
+          930,
+          871
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "identity",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          1127,
+          1492,
+          780
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "containment",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          15513,
+          854,
+          1431
+        ]
+      }
+    ],
+    "deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": [
+      {
+        "bundle_id": "bnd-syn-0000-978906",
+        "category": "identity",
+        "runs": [
+          7,
+          7,
+          5
+        ],
+        "median": 7,
+        "ms": [
+          841,
+          615,
+          671
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "identity",
+        "runs": [
+          7,
+          7,
+          7
+        ],
+        "median": 7,
+        "ms": [
+          598,
+          829,
+          571
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "containment",
+        "runs": [
+          5,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          650,
+          605,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0002-e58dcb",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          671,
+          791,
+          628
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0003-58db79",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          815,
+          713,
+          895
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          531,
+          2496,
+          490
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          867,
+          1007,
+          934
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          490,
+          674,
+          569
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          939,
+          527,
+          1064
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "identity",
+        "runs": [
+          5,
+          6,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          567,
+          495,
+          518
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          745,
+          667,
+          726
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          1101,
+          696,
+          686
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "containment",
+        "runs": [
+          5,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          929,
+          799,
+          553
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0008-a92416",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          774,
+          614,
+          488
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          671,
+          691,
+          600
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          825,
+          703,
+          826
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          680,
+          623,
+          680
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "containment",
+        "runs": [
+          4,
+          5,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          2498,
+          800,
+          807
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          684,
+          687,
+          945
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "containment",
+        "runs": [
+          7,
+          7,
+          6
+        ],
+        "median": 7,
+        "ms": [
+          820,
+          1267,
+          902
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          676,
+          831,
+          594
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          6
+        ],
+        "median": 5,
+        "ms": [
+          1122,
+          530,
+          857
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          752,
+          622,
+          559
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          562,
+          563,
+          521
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0014-6113ae",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          636,
+          477,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          634,
+          607,
+          824
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          613,
+          616,
+          835
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0016-5a2d93",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          534,
+          507,
+          536
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          585,
+          603,
+          659
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          811,
+          825,
+          621
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0018-a8a3bb",
+        "category": "identity",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          3064,
+          792,
+          559
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0019-7135a7",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          2
+        ],
+        "median": 3,
+        "ms": [
+          625,
+          554,
+          900
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "identity",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          1037,
+          600,
+          596
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "containment",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          519,
+          578,
+          556
+        ]
+      }
+    ],
+    "moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": [
+      {
+        "bundle_id": "bnd-syn-0000-978906",
+        "category": "identity",
+        "runs": [
+          6,
+          4,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          7903,
+          6260,
+          9098
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "identity",
+        "runs": [
+          8,
+          6,
+          8
+        ],
+        "median": 8,
+        "ms": [
+          3577,
+          22034,
+          8369
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          4603,
+          9382,
+          9820
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0002-e58dcb",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2106,
+          1537,
+          1279
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0003-58db79",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          22052,
+          8018,
+          7624
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          1918,
+          1203,
+          2189
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          36936,
+          5404,
+          5072
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "identity",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          2520,
+          1526,
+          2590
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          3
+        ],
+        "median": 3,
+        "ms": [
+          7050,
+          8478,
+          9145
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "identity",
+        "runs": [
+          4,
+          2,
+          6
+        ],
+        "median": 4,
+        "ms": [
+          15961,
+          1199,
+          1144
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          3
+        ],
+        "median": 4,
+        "ms": [
+          4030,
+          8891,
+          5558
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          1471,
+          1382,
+          1629
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          34852,
+          4637,
+          3069
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0008-a92416",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          6
+        ],
+        "median": 4,
+        "ms": [
+          5455,
+          3719,
+          3637
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          1398,
+          1203,
+          2476
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          34583,
+          4140,
+          4979
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "identity",
+        "runs": [
+          4,
+          3,
+          6
+        ],
+        "median": 4,
+        "ms": [
+          2036,
+          1878,
+          1364
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "containment",
+        "runs": [
+          3,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          2774,
+          3484,
+          4851
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "identity",
+        "runs": [
+          1,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          1582,
+          33081,
+          3911
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "containment",
+        "runs": [
+          4,
+          3,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          2538,
+          3831,
+          4021
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "identity",
+        "runs": [
+          2,
+          3,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          2558,
+          3816,
+          3825
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          3
+        ],
+        "median": 4,
+        "ms": [
+          3292,
+          35276,
+          3811
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          3720,
+          3878,
+          3784
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2532,
+          4470,
+          3489
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0014-6113ae",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2523,
+          4186,
+          34003
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          4187,
+          3872,
+          3371
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "containment",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2297,
+          7716,
+          5913
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0016-5a2d93",
+        "category": "identity",
+        "runs": [
+          3,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2308,
+          4042,
+          18042
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "identity",
+        "runs": [
+          5,
+          6,
+          4
+        ],
+        "median": 5,
+        "ms": [
+          4008,
+          3502,
+          4239
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "containment",
+        "runs": [
+          3,
+          3,
+          2
+        ],
+        "median": 3,
+        "ms": [
+          2526,
+          5280,
+          5553
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0018-a8a3bb",
+        "category": "identity",
+        "runs": [
+          4,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          2808,
+          34530,
+          4451
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0019-7135a7",
+        "category": "identity",
+        "runs": [
+          1,
+          1,
+          1
+        ],
+        "median": 1,
+        "ms": [
+          2397,
+          3529,
+          5212
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "identity",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          2802,
+          3645,
+          3497
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "containment",
+        "runs": [
+          10,
+          10,
+          2
+        ],
+        "median": 10,
+        "ms": [
+          2448,
+          34489,
+          3439
+        ]
+      }
     ]
   },
   "summary": {
@@ -4587,6 +6159,162 @@
       "invalid_runs": 0,
       "median_ms_per_call": 2791
     },
+    "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+      "containment_host_reach": {
+        "shown": 2.33,
+        "not_shown": 3,
+        "n_shown": 6,
+        "n_not": 6
+      },
+      "containment_priv_root_le2": {
+        "hits": 2,
+        "of": 2
+      },
+      "identity_baked_secret": {
+        "shown": 2.8,
+        "not_shown": 3.67,
+        "n_shown": 5,
+        "n_not": 15
+      },
+      "identity_no_credentials": {
+        "shown": 5.5,
+        "not_shown": 2.94,
+        "n_shown": 4,
+        "n_not": 16
+      },
+      "null_control": {
+        "identity": 10,
+        "containment": 10
+      },
+      "mean_real": {
+        "identity": 3.45,
+        "containment": 2.67
+      },
+      "range_real": {
+        "identity": [
+          1,
+          7
+        ],
+        "containment": [
+          1,
+          3
+        ]
+      },
+      "runs_identical": {
+        "items": 26,
+        "of": 34
+      },
+      "runs_within_one": {
+        "items": 31,
+        "of": 34
+      },
+      "invalid_runs": 0,
+      "median_ms_per_call": 850
+    },
+    "deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+      "containment_host_reach": {
+        "shown": 4.5,
+        "not_shown": 4.33,
+        "n_shown": 6,
+        "n_not": 6
+      },
+      "containment_priv_root_le2": {
+        "hits": 0,
+        "of": 2
+      },
+      "identity_baked_secret": {
+        "shown": 2.6,
+        "not_shown": 4.2,
+        "n_shown": 5,
+        "n_not": 15
+      },
+      "identity_no_credentials": {
+        "shown": 6,
+        "not_shown": 3.25,
+        "n_shown": 4,
+        "n_not": 16
+      },
+      "null_control": {
+        "identity": 10,
+        "containment": 10
+      },
+      "mean_real": {
+        "identity": 3.8,
+        "containment": 4.42
+      },
+      "range_real": {
+        "identity": [
+          1,
+          7
+        ],
+        "containment": [
+          3,
+          7
+        ]
+      },
+      "runs_identical": {
+        "items": 26,
+        "of": 34
+      },
+      "runs_within_one": {
+        "items": 33,
+        "of": 34
+      },
+      "invalid_runs": 0,
+      "median_ms_per_call": 671
+    },
+    "moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+      "containment_host_reach": {
+        "shown": 1.5,
+        "not_shown": 4.17,
+        "n_shown": 6,
+        "n_not": 6
+      },
+      "containment_priv_root_le2": {
+        "hits": 2,
+        "of": 2
+      },
+      "identity_baked_secret": {
+        "shown": 2,
+        "not_shown": 2.93,
+        "n_shown": 5,
+        "n_not": 15
+      },
+      "identity_no_credentials": {
+        "shown": 5.75,
+        "not_shown": 1.94,
+        "n_shown": 4,
+        "n_not": 16
+      },
+      "null_control": {
+        "identity": 10,
+        "containment": 10
+      },
+      "mean_real": {
+        "identity": 2.7,
+        "containment": 2.83
+      },
+      "range_real": {
+        "identity": [
+          1,
+          8
+        ],
+        "containment": [
+          1,
+          6
+        ]
+      },
+      "runs_identical": {
+        "items": 18,
+        "of": 34
+      },
+      "runs_within_one": {
+        "items": 24,
+        "of": 34
+      },
+      "invalid_runs": 0,
+      "median_ms_per_call": 3828
+    },
     "_rank_agreement": {
       "laya (typed-decisions, stock) ~ gemini (gemini-3.5-flash-lite)": {
         "identity": 0.08,
@@ -4608,6 +6336,18 @@
         "identity": -0.08,
         "containment": 0.14
       },
+      "laya (typed-decisions, stock) ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.252,
+        "containment": 0.055
+      },
+      "laya (typed-decisions, stock) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.023,
+        "containment": 0.275
+      },
+      "laya (typed-decisions, stock) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": -0.019,
+        "containment": -0.113
+      },
       "gemini (gemini-3.5-flash-lite) ~ gemini (gemini-3.5-flash-lite) + production prompt v7": {
         "identity": 0.151,
         "containment": 0.427
@@ -4624,6 +6364,18 @@
         "identity": 0.464,
         "containment": 0.154
       },
+      "gemini (gemini-3.5-flash-lite) ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.481,
+        "containment": 0.405
+      },
+      "gemini (gemini-3.5-flash-lite) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.7,
+        "containment": 0.08
+      },
+      "gemini (gemini-3.5-flash-lite) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.729,
+        "containment": 0.67
+      },
       "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ qwen3:14b (local)": {
         "identity": 0.434,
         "containment": 0.653
@@ -4636,6 +6388,18 @@
         "identity": 0.431,
         "containment": 0.084
       },
+      "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.382,
+        "containment": 0.494
+      },
+      "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.426,
+        "containment": 0.181
+      },
+      "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.24,
+        "containment": 0.582
+      },
       "qwen3:14b (local) ~ qwen3:32b (local)": {
         "identity": 0.628,
         "containment": 0.416
@@ -4644,9 +6408,57 @@
         "identity": 0.509,
         "containment": 0.24
       },
+      "qwen3:14b (local) ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.607,
+        "containment": 0.819
+      },
+      "qwen3:14b (local) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.648,
+        "containment": 0.497
+      },
+      "qwen3:14b (local) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.549,
+        "containment": 0.739
+      },
       "qwen3:32b (local) ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
         "identity": 0.444,
         "containment": 0.149
+      },
+      "qwen3:32b (local) ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.737,
+        "containment": 0.463
+      },
+      "qwen3:32b (local) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.739,
+        "containment": 0.554
+      },
+      "qwen3:32b (local) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.828,
+        "containment": 0.183
+      },
+      "jevk5 (4b v0.3 Q8_0, llama.cpp) ~ deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8)": {
+        "identity": 0.513,
+        "containment": 0.456
+      },
+      "jevk5 (4b v0.3 Q8_0, llama.cpp) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.745,
+        "containment": 0.377
+      },
+      "jevk5 (4b v0.3 Q8_0, llama.cpp) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.538,
+        "containment": 0.092
+      },
+      "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8) ~ deepseek/deepseek-v4-flash (openrouter: parasail/fp8)": {
+        "identity": 0.818,
+        "containment": 0.607
+      },
+      "deepseek/deepseek-v4-pro-0813 (openrouter: parasail/fp8) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.779,
+        "containment": 0.607
+      },
+      "deepseek/deepseek-v4-flash (openrouter: parasail/fp8) ~ moonshotai/kimi-k3 (openrouter: moonshotai/mxfp4)": {
+        "identity": 0.878,
+        "containment": 0.318
       }
     }
   }

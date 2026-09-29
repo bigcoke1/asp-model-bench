@@ -51,7 +51,7 @@ import urllib.error
 import urllib.parse
 from pathlib import Path
 
-from aspbench.clients import GEMINI_OPENAI, jevk5_model, laya_agent, post
+from aspbench.clients import GEMINI_OPENAI, jevk5_model, laya_agent, openrouter_json, post
 from aspbench.data import BUNDLES, DATAGEN_COMMIT, bundles, coverage, facts, scenarios
 from risk_detection import asp_score as A
 
@@ -192,6 +192,40 @@ class Qwen32(Qwen):
 
     def __init__(self):
         super().__init__("qwen3:32b")
+
+
+class OpenWeightAPI:
+    """An open-weight model too big to run here, through OpenRouter on one pinned provider:
+    temperature 0, reasoning off, JSON output, the same prompt as qwen3 and Gemini."""
+    model = provider = None
+    temperature = 0
+
+    def __init__(self):
+        self.name = f"{self.model} (openrouter: {self.provider})"
+        self.settings = {"model": self.model, "provider": self.provider, "temperature": self.temperature,
+                         "reasoning": False, "output": "JSON", "server": "openrouter",
+                         "scale": "1-10", "input": "scoped prose + short question"}
+
+    def __call__(self, item, run):
+        r = openrouter_json(self.model, self.provider, [{"role": "user", "content": llm_prompt(item["state"], item["category"])}])
+        lv = r.get("level") if isinstance(r, dict) else None
+        return {"score": level_to_score(lv)}
+
+
+class DeepSeekPro(OpenWeightAPI):
+    key, label = "deepseek-pro", "DeepSeek V4 Pro"
+    model, provider = "deepseek/deepseek-v4-pro-0813", "parasail/fp8"  # fp8 as released; DeepSeek's own endpoint may train on prompts
+
+
+class DeepSeekFlash(OpenWeightAPI):
+    key, label = "deepseek-flash", "DeepSeek V4 Flash"
+    model, provider = "deepseek/deepseek-v4-flash", "parasail/fp8"  # fp8 as released; DeepSeek does not serve it here
+
+
+class KimiK3(OpenWeightAPI):
+    key, label = "kimi-k3", "Kimi K3"
+    model, provider = "moonshotai/kimi-k3", "moonshotai/mxfp4"  # Moonshot's own servers, 4-bit as released
+    temperature = "Moonshot's default: its endpoint takes no temperature"
 
 
 class JevK5:
@@ -386,7 +420,8 @@ def table(doc) -> str:
 
 def ordered(results, settings):
     """Columns in a fixed order, so the two Gemini columns sit side by side."""
-    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, Qwen32.label, JevK5.label, Jev.label]
+    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, Qwen32.label, JevK5.label,
+             DeepSeekPro.label, DeepSeekFlash.label, KimiK3.label, Jev.label]
     rank = lambda n: order.index(settings[n]["label"]) if settings[n]["label"] in order else len(order)
     return {n: results[n] for n in sorted(results, key=rank)}
 
@@ -394,7 +429,7 @@ def ordered(results, settings):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--systems", nargs="+", default=["laya", "gemini", "gemini-prod", "qwen", "jevk5"],
-                    choices=["laya", "gemini", "gemini-prod", "qwen", "qwen32b", "jevk5", "jev"])
+                    choices=["laya", "gemini", "gemini-prod", "qwen", "qwen32b", "jevk5", "jev", *["deepseek-pro", "deepseek-flash", "kimi-k3"]])
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
     ap.add_argument("--out", default=str(HERE / "results/bench_results.json"))
@@ -413,7 +448,8 @@ def main():
         print("risk inputs: match the stored results" if same else "risk inputs: DIFFER from the stored results")
         sys.exit(0 if same else 1)
     make = {"laya": lambda: Laya(agent), "gemini": lambda: Gemini(args.gemini_model),
-            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "qwen32b": Qwen32, "jevk5": JevK5, "jev": Jev}
+            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "qwen32b": Qwen32, "jevk5": JevK5, "jev": Jev,
+            "deepseek-pro": DeepSeekPro, "deepseek-flash": DeepSeekFlash, "kimi-k3": KimiK3}
     systems = [make[k]() for k in args.systems]
 
     results, status, settings = {}, {}, {}

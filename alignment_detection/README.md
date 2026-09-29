@@ -5,14 +5,15 @@ Given two snapshots of the same agent's evidence bundle, taken at different time
 Unlike [risk detection](../risk_detection), this task has ground truth. The later snapshots are made by editing copies of the bundles, so every label is known.
 
 **Short answer:**
-- **Four models are good at it (F1 of 0.90 or more): qwen3:32b (0.96), qwen3:14b (0.95), Gemini (0.93) and JevK5 (0.90).** All four catch nearly every real change: qwen3:14b misses none of the 120, and the other three miss one each.
-- **Their mistakes are mostly false alarms on equivalent notation.** Every model calls `root` → `0` misaligned in all 7 cases, and trailing slashes trip all four.
+- **Kimi K3 is nearly perfect: F1 0.996, one false alarm in 400 items.** It caught all 120 real changes, and it is the only capable model that knows `root` and `0` are the same user.
+- **Five more models are good at it (F1 of 0.90 or more): DeepSeek V4 Pro (0.97), qwen3:32b (0.96), qwen3:14b (0.95), Gemini (0.93) and JevK5 (0.90).** All catch nearly every real change: DeepSeek V4 Pro and qwen3:14b miss none of the 120, and the other three miss one each.
+- **Their mistakes are mostly false alarms on equivalent notation.** Every model but Kimi K3 and stock Laya calls `root` → `0` misaligned in all 7 cases, and trailing slashes trip every model but DeepSeek V4 Pro.
 - **Two misses matter.** JevK5 passed `db.example.com` → `db.examp1e.com`, a lookalike host, as unchanged. Gemini and qwen3:32b both passed a credential's class changing from `secret_plaintext` to `secret_ref`.
 - **A bigger model helps only a little.** qwen3:32b, more than twice the size of qwen3:14b, makes 9 mistakes to its 12: four fewer false alarms on trailing slashes, but one missed change.
-- **Simple rules get most of the way.** Normalized diff uses no model, scores 0.87 and misses nothing. The models beat it only on equivalent notation.
+- **Simple rules get most of the way.** Normalized diff uses no model, scores 0.87 and misses nothing. The models beat it only on equivalent notation, and DeepSeek V4 Flash does not beat it at all: 35 false alarms there against the rules' 36.
 - **Stock Laya is worse than a plain text diff (0.38).** Its probabilities rank misaligned attributes no better than chance (AUROC 0.52).
 
-Run on 2026-09-25 with `bench.py`, on a 16 GB M3 laptop; the qwen3:32b column on 2026-09-28, on a Mac mini (M4 Pro, 48 GB). Every number here is in [`results/alignment_results.json`](results/alignment_results.json).
+Run on 2026-09-25 with `bench.py`, on a 16 GB M3 laptop; the qwen3:32b column on 2026-09-28, on a Mac mini (M4 Pro, 48 GB); the DeepSeek and Kimi columns on 2026-09-29, through OpenRouter. Every number here is in [`results/alignment_results.json`](results/alignment_results.json).
 
 ## Results
 
@@ -20,72 +21,81 @@ Ranked by F1. The verdict is explained in [How to read the tables](#how-to-read-
 
 | rank | system | verdict | F1 | precision | recall | accuracy | AUROC | time per call |
 |---|---|---|---|---|---|---|---|---|
-| 1 | qwen3:32b | ✓ good | **0.96** | 0.94 | 0.99 | 0.98 | – | 2,117 ms |
-| 2 | qwen3:14b | ✓ good | **0.95** | 0.91 | 1.00 | 0.97 | – | 4,350 ms |
-| 3 | Gemini | ✓ good | **0.93** | 0.88 | 0.99 | 0.95 | – | 586 ms |
-| 4 | JevK5 | ✓ good | **0.90** | 0.83 | 0.99 | 0.94 | 0.99 | 2,327 ms |
-| 5 | normalized diff (baseline) | ~ fair | **0.87** | 0.77 | 1.00 | 0.91 | – | – |
-| 6 | exact diff (baseline) | ✗ poor | **0.67** | 0.50 | 1.00 | 0.70 | – | – |
-| 7 | stock Laya | ✗ poor | **0.38** | 0.33 | 0.44 | 0.56 | 0.52 | 119 ms |
+| 1 | Kimi K3 | ✓ good | **1.00** | 0.99 | 1.00 | 1.00 | – | 2,524 ms |
+| 2 | DeepSeek V4 Pro | ✓ good | **0.97** | 0.94 | 1.00 | 0.98 | – | 810 ms |
+| 3 | qwen3:32b | ✓ good | **0.96** | 0.94 | 0.99 | 0.98 | – | 2,117 ms |
+| 4 | qwen3:14b | ✓ good | **0.95** | 0.91 | 1.00 | 0.97 | – | 4,350 ms |
+| 5 | Gemini | ✓ good | **0.93** | 0.88 | 0.99 | 0.95 | – | 586 ms |
+| 6 | JevK5 | ✓ good | **0.90** | 0.83 | 0.99 | 0.94 | 0.99 | 2,327 ms |
+| 7 | DeepSeek V4 Flash | ~ fair | **0.87** | 0.77 | 1.00 | 0.91 | – | 686 ms |
+| 8 | normalized diff (baseline) | ~ fair | **0.87** | 0.77 | 1.00 | 0.91 | – | – |
+| 9 | exact diff (baseline) | ✗ poor | **0.67** | 0.50 | 1.00 | 0.70 | – | – |
+| 10 | stock Laya | ✗ poor | **0.38** | 0.33 | 0.44 | 0.56 | 0.52 | 119 ms |
 
 ### Where each system goes wrong
 
 Each misalignment row counts changes caught, so higher is better; each false-alarm row counts attributes wrongly flagged, so lower is better.
 
-| | qwen3:32b | qwen3:14b | Gemini | JevK5 | normalized diff (baseline) | exact diff (baseline) | stock Laya |
-|---|---|---|---|---|---|---|---|
-| Misalignment caught: plain (add, remove, replace, evidence lost or gained) | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 15 / 60 |
-| Misalignment caught: subtle (one field or one character) | 59 / 60 | 60 / 60 | 59 / 60 | 59 / 60 | 60 / 60 | 60 / 60 | 38 / 60 |
-| False alarms: reformatted (reordered, note reworded) | 0 / 60 ✓ | 0 / 60 ✓ | 0 / 60 ✓ | 1 / 60 | 0 / 60 ✓ | 60 / 60 | 34 / 60 |
-| False alarms: equivalent notation (case, slash, uid 0, CAP_, v1, :443, read-only) | 8 / 60 | 12 / 60 | 17 / 60 | 24 / 60 | 36 / 60 | 60 / 60 | 34 / 60 |
-| False alarms: identical | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 41 / 160 |
+| | Kimi K3 | DeepSeek V4 Pro | qwen3:32b | qwen3:14b | Gemini | JevK5 | DeepSeek V4 Flash | normalized diff (baseline) | exact diff (baseline) | stock Laya |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Misalignment caught: plain (add, remove, replace, evidence lost or gained) | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 15 / 60 |
+| Misalignment caught: subtle (one field or one character) | 60 / 60 | 60 / 60 | 59 / 60 | 60 / 60 | 59 / 60 | 59 / 60 | 60 / 60 | 60 / 60 | 60 / 60 | 38 / 60 |
+| False alarms: reformatted (reordered, note reworded) | 0 / 60 ✓ | 0 / 60 ✓ | 0 / 60 ✓ | 0 / 60 ✓ | 0 / 60 ✓ | 1 / 60 | 0 / 60 ✓ | 0 / 60 ✓ | 60 / 60 | 34 / 60 |
+| False alarms: equivalent notation (case, slash, uid 0, CAP_, v1, :443, read-only) | 1 / 60 | 7 / 60 | 8 / 60 | 12 / 60 | 17 / 60 | 24 / 60 | 35 / 60 | 36 / 60 | 60 / 60 | 34 / 60 |
+| False alarms: identical | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 41 / 160 |
 
 <details>
 <summary>By kind of change</summary>
 
-| change | label | qwen3:32b | qwen3:14b | Gemini | JevK5 | normalized diff (baseline) | exact diff (baseline) | stock Laya |
-|---|---|---|---|---|---|---|---|---|
-| `add_item` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 3 / 10 |
-| `allow_more` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
-| `approval` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 2 / 5 |
-| `cap_added` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 1 / 4 |
-| `cred_class` | misaligned: caught | 4 / 5 | 5 / 5 | 4 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
-| `digest_digit` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
-| `evidence_gained` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 3 / 10 |
-| `evidence_lost` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 0 / 10 |
-| `flag_flip` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 0 / 10 |
-| `lookalike_host` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 4 / 5 | 5 / 5 | 5 / 5 | 3 / 5 |
-| `mcp_mode` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 2 / 4 |
-| `mount_mode` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 2 / 4 |
-| `privileged` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 0 / 5 |
-| `provenance` | misaligned: caught | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 |
-| `remove_item` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 5 / 10 |
-| `replace_value` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 4 / 10 |
-| `root_fs` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
-| `tls_flip` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 2 / 5 |
-| `version_bump` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 3 / 5 |
-| `cap_prefix` | aligned: false alarms | 0 / 3 ✓ | 0 / 3 ✓ | 2 / 3 | 0 / 3 ✓ | 3 / 3 | 3 / 3 | 1 / 3 |
-| `default_port` | aligned: false alarms | 0 / 6 ✓ | 0 / 6 ✓ | 1 / 6 | 6 / 6 | 6 / 6 | 6 / 6 | 6 / 6 |
-| `host_case` | aligned: false alarms | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 12 / 12 | 9 / 12 |
-| `identical` | aligned: false alarms | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 41 / 160 |
-| `mode_alias` | aligned: false alarms | 0 / 10 ✓ | 0 / 10 ✓ | 4 / 10 | 0 / 10 ✓ | 10 / 10 | 10 / 10 | 5 / 10 |
-| `reorder_keys` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 20 / 20 | 13 / 20 |
-| `reorder_list` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 1 / 20 | 0 / 20 ✓ | 20 / 20 | 16 / 20 |
-| `reword_note` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 20 / 20 | 5 / 20 |
-| `trailing_slash` | aligned: false alarms | 1 / 12 | 5 / 12 | 3 / 12 | 4 / 12 | 0 / 12 ✓ | 12 / 12 | 7 / 12 |
-| `uid_alias` | aligned: false alarms | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 0 / 7 ✓ |
-| `version_prefix` | aligned: false alarms | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 7 / 10 | 10 / 10 | 10 / 10 | 6 / 10 |
+| change | label | Kimi K3 | DeepSeek V4 Pro | qwen3:32b | qwen3:14b | Gemini | JevK5 | DeepSeek V4 Flash | normalized diff (baseline) | exact diff (baseline) | stock Laya |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `add_item` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 3 / 10 |
+| `allow_more` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
+| `approval` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 2 / 5 |
+| `cap_added` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 1 / 4 |
+| `cred_class` | misaligned: caught | 5 / 5 | 5 / 5 | 4 / 5 | 5 / 5 | 4 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
+| `digest_digit` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
+| `evidence_gained` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 3 / 10 |
+| `evidence_lost` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 0 / 10 |
+| `flag_flip` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 0 / 10 |
+| `lookalike_host` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 4 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 3 / 5 |
+| `mcp_mode` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 2 / 4 |
+| `mount_mode` | misaligned: caught | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 4 / 4 | 2 / 4 |
+| `privileged` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 0 / 5 |
+| `provenance` | misaligned: caught | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 | 3 / 3 |
+| `remove_item` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 5 / 10 |
+| `replace_value` | misaligned: caught | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | 4 / 10 |
+| `root_fs` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 |
+| `tls_flip` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 2 / 5 |
+| `version_bump` | misaligned: caught | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 5 / 5 | 3 / 5 |
+| `cap_prefix` | aligned: false alarms | 0 / 3 ✓ | 0 / 3 ✓ | 0 / 3 ✓ | 0 / 3 ✓ | 2 / 3 | 0 / 3 ✓ | 3 / 3 | 3 / 3 | 3 / 3 | 1 / 3 |
+| `default_port` | aligned: false alarms | 0 / 6 ✓ | 0 / 6 ✓ | 0 / 6 ✓ | 0 / 6 ✓ | 1 / 6 | 6 / 6 | 5 / 6 | 6 / 6 | 6 / 6 | 6 / 6 |
+| `host_case` | aligned: false alarms | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 0 / 12 ✓ | 3 / 12 | 0 / 12 ✓ | 12 / 12 | 9 / 12 |
+| `identical` | aligned: false alarms | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 0 / 160 ✓ | 41 / 160 |
+| `mode_alias` | aligned: false alarms | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 4 / 10 | 0 / 10 ✓ | 3 / 10 | 10 / 10 | 10 / 10 | 5 / 10 |
+| `reorder_keys` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 20 / 20 | 13 / 20 |
+| `reorder_list` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 1 / 20 | 0 / 20 ✓ | 0 / 20 ✓ | 20 / 20 | 16 / 20 |
+| `reword_note` | aligned: false alarms | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 0 / 20 ✓ | 20 / 20 | 5 / 20 |
+| `trailing_slash` | aligned: false alarms | 1 / 12 | 0 / 12 ✓ | 1 / 12 | 5 / 12 | 3 / 12 | 4 / 12 | 8 / 12 | 0 / 12 ✓ | 12 / 12 | 7 / 12 |
+| `uid_alias` | aligned: false alarms | 0 / 7 ✓ | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 7 / 7 | 0 / 7 ✓ |
+| `version_prefix` | aligned: false alarms | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 0 / 10 ✓ | 7 / 10 | 6 / 10 | 10 / 10 | 10 / 10 | 6 / 10 |
 
 </details>
 
 ### What it shows
 
-- **qwen3:32b is the best alignment detector here, by a small margin.**
-  - It raised the fewest false alarms, 8: `root` → `0` (7 of 7), which every model gets wrong, and one trailing slash (1 of 12, against 5 of 12 for qwen3:14b).
+- **Kimi K3 is the best alignment detector here.**
+  - It caught all 120 real changes and raised one false alarm: a trailing slash on a `/host/` mount, the same one qwen3:32b flagged.
+  - It is the only capable model that passed `root` → `0` as unchanged, in all 7 cases.
+  - It ran once per item at Moonshot's default temperature, since its endpoint takes none. In the risk benchmark its three runs agreed exactly on only 18 of 34 items, so a rerun could shift a few answers here too.
+  - 2.5 s per call through OpenRouter.
+- **DeepSeek V4 Pro is next: F1 0.97, and its only mistakes are `root` → `0` (7 of 7).** It caught all 120 changes and raised no other false alarm, not even on trailing slashes. 0.8 s per call through OpenRouter.
+- **qwen3:32b is the best local model, by a small margin.**
+  - It raised 8 false alarms: `root` → `0` (7 of 7) and one trailing slash (1 of 12, against 5 of 12 for qwen3:14b).
   - It missed one change, the same one Gemini missed: `QUIZ_MTLS_CERT` going from `secret_plaintext` to `secret_ref`.
   - 9 mistakes against qwen3:14b's 12, on 400 items, is too small a gap to call it clearly better.
   - It took 2.1 s per call on the Mac mini, fully on the GPU. That does not compare with the times below, which come from the laptop.
-- **qwen3:14b is nearly as good at less than half the size, and the only model that caught all 120 changes.**
+- **qwen3:14b is nearly as good at less than half the size.**
   - It caught all 120 real changes, including every lookalike host and the one-digit changes to image digests.
   - Its 12 false alarms are all equivalent notation: trailing slashes (5 of 12) and `root` → `0` (7 of 7).
   - It took 4.4 s per call because this 16 GB laptop was swapping during the run. Its first 50 items took 3.4 s each.
@@ -101,6 +111,7 @@ Each misalignment row counts changes caught, so higher is better; each false-ala
     - trailing slashes (4 of 12);
     - one reordered list.
   - Its AUROC of 0.99 means its probabilities nearly separate misaligned from aligned. A threshold of 0.55 instead of 0.5 would give F1 0.93 on these items, but that threshold was picked on the same items, so treat it as optimistic.
+- **DeepSeek V4 Flash is no better than normalized diff (0.87).** It caught all 120 changes, but raised 35 false alarms on equivalent notation, across every kind: trailing slashes (8 of 12), `root` → `0` (7 of 7), `v`-prefixes (6 of 10), `:443` (5 of 6), and 3 each of hostname case, `read-only` and `CAP_`.
 - **Normalized diff is the line a model has to beat.** It catches every change and raises no false alarms on formatting or on identical attributes. All 36 of its false alarms are equivalent notation it has no rule for: `root` = `0`, `CAP_`, `v`-prefixes, `:443` and `read-only`.
 - **Exact diff flags every reformatting,** so half of what it flags is noise (precision 0.50).
 - **Stock Laya is unusable here.**
@@ -171,6 +182,8 @@ The kinds of change, balanced across the dataset:
 | JevK5 | v0.3 4B, `jevk5-4b-v0.3-Q8_0.gguf` on a local `llama-server`, the question as a yes/no at the file's calibration temperature, 1.22; misaligned when P(yes) ≥ 0.5. |
 | qwen3:14b | Local Ollama, thinking off, temperature 0, reply constrained to `{"drift": true/false}` (the prompt's wording, as run). |
 | qwen3:32b | The same as qwen3:14b, with `qwen3:32b` (Q4_K_M, 20 GB), on a Mac mini with 48 GB, all on the GPU. |
+| DeepSeek V4 Pro, DeepSeek V4 Flash | Through [OpenRouter](https://openrouter.ai) on Parasail at fp8, the precision DeepSeek released them at, pinned with no fallback. `deepseek/deepseek-v4-pro-0813` and `deepseek/deepseek-v4-flash`, temperature 0, reasoning off, JSON output. |
+| Kimi K3 | Through OpenRouter on Moonshot's own servers at its released 4-bit, pinned with no fallback. Reasoning off, JSON output; Moonshot's endpoint takes no temperature, so it runs at Moonshot's default. |
 | Gemini | `gemini-3.5-flash-lite` through the OpenAI-compatible endpoint, temperature 0, JSON output. |
 
 Every system answered every item once. Laya and JevK5 are deterministic, and the LLMs run at temperature 0. `RUNS=3` takes a majority of three instead.
@@ -181,7 +194,8 @@ Every system answered every item once. Laya and JevK5 are deterministic, and the
 - **"Equivalent notation" is a judgement.** `root` and `0` are the same user, and `/app/x/` is the same directory as `/app/x`, but a reader may disagree with a kind. The per-kind table shows each one separately, so it can be discounted.
 - **Normalized diff overlaps the formatting edits by design.** Its rules (sorting, case, trailing slashes, ignoring notes) are the generic ones anyone would write first, and they happen to cover formatting fully. It stands for what simple rules get you. Adding per-attribute rules, such as `root` = `0`, `ro` = `read-only` and dropping `:443`, would raise it further.
 - **Small counts per kind:** 3 to 20 items each, and 160 identical controls.
-- **One run per item.** In the risk benchmark, Gemini at temperature 0 was not fully deterministic.
+- **One run per item.** In the risk benchmark, Gemini at temperature 0 was not fully deterministic, and Kimi K3, which cannot be set to temperature 0, agreed with itself exactly on only 18 of 34 items.
+- **Hosted models can change.** The DeepSeek and Kimi columns name the model version and the provider, but a provider can update its serving stack behind the same name, so a later rerun may differ.
 
 ## Rerun, or read later
 
@@ -192,6 +206,7 @@ make alignment-report                  # print these tables from the stored resu
 make alignment-quick                   # rerun the two diff baselines, no model, a few seconds
 make alignment                         # rerun every system but qwen3:32b (see the root README for servers, keys and times)
 make alignment SYSTEMS=qwen32b         # rerun qwen3:32b, on a machine with 32 GB or more
+make alignment SYSTEMS="deepseek-pro deepseek-flash kimi-k3"   # through OpenRouter; needs OPENROUTER_API_KEY
 make alignment SYSTEMS="gemini laya"   # rerun some; the other systems' stored results are kept
 make alignment-data                    # rebuild the dataset (then rerun, since the items change)
 ```
