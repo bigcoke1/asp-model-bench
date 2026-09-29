@@ -1,6 +1,6 @@
 {
   "meta": {
-    "run_at": "2026-09-25T23:36:23+00:00",
+    "run_at": "2026-09-29T05:42:53+00:00",
     "runs_per_item": 3,
     "aggregate": "median of the valid runs",
     "scale": "1-10, 10 safest (Laya level i = score i+1), except systems whose settings say 0-10",
@@ -82,6 +82,16 @@
         "temperature": 1.22,
         "scale": "1-10",
         "input": "scoped prose + short question"
+      },
+      "qwen3:32b (local)": {
+        "label": "qwen3:32b",
+        "model": "qwen3:32b",
+        "temperature": 0,
+        "think": false,
+        "num_ctx": 8192,
+        "server": "ollama",
+        "scale": "1-10",
+        "input": "scoped prose + short question"
       }
     },
     "status": {
@@ -89,7 +99,8 @@
       "gemini (gemini-3.5-flash-lite)": "ok",
       "qwen3:14b (local)": "ok",
       "gemini (gemini-3.5-flash-lite) + production prompt v7": "ok",
-      "jevk5 (4b v0.3 Q8_0, llama.cpp)": "ok"
+      "jevk5 (4b v0.3 Q8_0, llama.cpp)": "ok",
+      "qwen3:32b (local)": "ok"
     }
   },
   "items": [
@@ -2796,6 +2807,518 @@
         ]
       }
     ],
+    "qwen3:32b (local)": [
+      {
+        "bundle_id": "bnd-syn-0000-978906",
+        "category": "identity",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          7610,
+          626,
+          625
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "identity",
+        "runs": [
+          8,
+          8,
+          8
+        ],
+        "median": 8,
+        "ms": [
+          6046,
+          635,
+          648
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0001-71b35c",
+        "category": "containment",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          7599,
+          627,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0002-e58dcb",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5278,
+          627,
+          629
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0003-58db79",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6451,
+          628,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6848,
+          627,
+          636
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0004-506300",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          5281,
+          626,
+          629
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "identity",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          5261,
+          628,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0005-3cb433",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          5260,
+          624,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "identity",
+        "runs": [
+          7,
+          7,
+          7
+        ],
+        "median": 7,
+        "ms": [
+          5255,
+          627,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0006-313416",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          5654,
+          629,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5250,
+          624,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0007-9ae1ac",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          5259,
+          627,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0008-a92416",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6044,
+          628,
+          628
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5275,
+          652,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0009-8c8243",
+        "category": "containment",
+        "runs": [
+          5,
+          5,
+          5
+        ],
+        "median": 5,
+        "ms": [
+          5277,
+          649,
+          647
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "identity",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          4874,
+          630,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0010-2774bd",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5272,
+          626,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6054,
+          656,
+          674
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0011-090b0b",
+        "category": "containment",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          4882,
+          643,
+          667
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5711,
+          642,
+          626
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0012-f8fc76",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          4875,
+          654,
+          658
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          6058,
+          624,
+          628
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0013-8a8fde",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          4868,
+          650,
+          661
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0014-6113ae",
+        "category": "identity",
+        "runs": [
+          2,
+          2,
+          2
+        ],
+        "median": 2,
+        "ms": [
+          6853,
+          628,
+          628
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6463,
+          626,
+          633
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0015-369ada",
+        "category": "containment",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          6056,
+          627,
+          625
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0016-5a2d93",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          5675,
+          626,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "identity",
+        "runs": [
+          7,
+          7,
+          7
+        ],
+        "median": 7,
+        "ms": [
+          5289,
+          659,
+          666
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0017-9e7c8b",
+        "category": "containment",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          5665,
+          646,
+          638
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0018-a8a3bb",
+        "category": "identity",
+        "runs": [
+          6,
+          6,
+          6
+        ],
+        "median": 6,
+        "ms": [
+          6844,
+          625,
+          627
+        ]
+      },
+      {
+        "bundle_id": "bnd-syn-0019-7135a7",
+        "category": "identity",
+        "runs": [
+          4,
+          4,
+          4
+        ],
+        "median": 4,
+        "ms": [
+          7422,
+          629,
+          628
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "identity",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          971,
+          611,
+          613
+        ]
+      },
+      {
+        "bundle_id": "NULL",
+        "category": "containment",
+        "runs": [
+          10,
+          10,
+          10
+        ],
+        "median": 10,
+        "ms": [
+          982,
+          659,
+          658
+        ]
+      }
+    ],
     "jevk5 (4b v0.3 Q8_0, llama.cpp)": [
       {
         "bundle_id": "bnd-syn-0000-978906",
@@ -3960,6 +4483,58 @@
       "invalid_runs": 0,
       "median_ms_per_call": 1272
     },
+    "qwen3:32b (local)": {
+      "containment_host_reach": {
+        "shown": 4.83,
+        "not_shown": 5,
+        "n_shown": 6,
+        "n_not": 6
+      },
+      "containment_priv_root_le2": {
+        "hits": 0,
+        "of": 2
+      },
+      "identity_baked_secret": {
+        "shown": 4,
+        "not_shown": 4.93,
+        "n_shown": 5,
+        "n_not": 15
+      },
+      "identity_no_credentials": {
+        "shown": 7,
+        "not_shown": 4.12,
+        "n_shown": 4,
+        "n_not": 16
+      },
+      "null_control": {
+        "identity": 10,
+        "containment": 10
+      },
+      "mean_real": {
+        "identity": 4.7,
+        "containment": 4.92
+      },
+      "range_real": {
+        "identity": [
+          2,
+          8
+        ],
+        "containment": [
+          4,
+          6
+        ]
+      },
+      "runs_identical": {
+        "items": 34,
+        "of": 34
+      },
+      "runs_within_one": {
+        "items": 34,
+        "of": 34
+      },
+      "invalid_runs": 0,
+      "median_ms_per_call": 642
+    },
     "jevk5 (4b v0.3 Q8_0, llama.cpp)": {
       "containment_host_reach": {
         "shown": 5.73,
@@ -4025,6 +4600,10 @@
         "identity": 0.105,
         "containment": 0.185
       },
+      "laya (typed-decisions, stock) ~ qwen3:32b (local)": {
+        "identity": 0.156,
+        "containment": 0.402
+      },
       "laya (typed-decisions, stock) ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
         "identity": -0.08,
         "containment": 0.14
@@ -4037,6 +4616,10 @@
         "identity": 0.364,
         "containment": 0.492
       },
+      "gemini (gemini-3.5-flash-lite) ~ qwen3:32b (local)": {
+        "identity": 0.478,
+        "containment": 0.3
+      },
       "gemini (gemini-3.5-flash-lite) ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
         "identity": 0.464,
         "containment": 0.154
@@ -4045,13 +4628,25 @@
         "identity": 0.434,
         "containment": 0.653
       },
+      "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ qwen3:32b (local)": {
+        "identity": 0.469,
+        "containment": 0.627
+      },
       "gemini (gemini-3.5-flash-lite) + production prompt v7 ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
         "identity": 0.431,
         "containment": 0.084
       },
+      "qwen3:14b (local) ~ qwen3:32b (local)": {
+        "identity": 0.628,
+        "containment": 0.416
+      },
       "qwen3:14b (local) ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
         "identity": 0.509,
         "containment": 0.24
+      },
+      "qwen3:32b (local) ~ jevk5 (4b v0.3 Q8_0, llama.cpp)": {
+        "identity": 0.444,
+        "containment": 0.149
       }
     }
   }

@@ -13,7 +13,8 @@ Benchmarks for the models behind **agent security profiling (ASP)**. Each task a
 |---|---|---|---|
 | Gemini, Rail Center's production prompt | Google API | ✓ **4 of 4** asked | – not run; the prompt is written for risk |
 | Gemini, short prompt | Google API | ~ 4 of 5; the fifth only weakly | ✓ **0.93** |
-| qwen3:14b (open) | this laptop, Ollama | ~ 3 of 5 | ✓ **0.95**, best |
+| qwen3:32b (open) | Mac mini (48 GB), Ollama | ~ 2 of 5 | ✓ **0.96**, best |
+| qwen3:14b (open) | this laptop, Ollama | ~ 3 of 5 | ✓ **0.95** |
 | JevK5 (open, 4B) | this laptop, llama.cpp | ~ 3 of 5 | ✓ **0.90** |
 | stock Laya (open, 0.4B) | this laptop, CPU | ✗ **0 of 5** | ✗ **0.38**, worse than a text diff |
 | normalized diff (rules, no model) | anywhere | – | ~ 0.87 |
@@ -22,7 +23,8 @@ Benchmarks for the models behind **agent security profiling (ASP)**. Each task a
 The model is `gemini-3.5-flash-lite` in both Gemini rows.
 
 - **For risk detection, use Gemini with Rail Center's production prompt.** It is the only system that passes every risk check.
-- **For alignment detection, qwen3:14b, Gemini and JevK5 are all good (F1 0.90–0.95).** qwen3:14b is best and runs locally. All three catch nearly every real change. Their mistakes are mostly false alarms on equivalent notation, such as `root` written as `0`.
+- **For alignment detection, qwen3:32b, qwen3:14b, Gemini and JevK5 are all good (F1 0.90–0.96).** The two Qwen models are best and run locally, and qwen3:14b fits a 16 GB laptop. All four catch nearly every real change. Their mistakes are mostly false alarms on equivalent notation, such as `root` written as `0`.
+- **A bigger Qwen barely helps, and on risk it does worse.** qwen3:32b scores 0.96 on alignment to qwen3:14b's 0.95, but passes one risk check fewer: its containment scores do not move with host reach.
 - **JevK5 is the lightest model that does well (4B, local).** It is good on alignment. On risk it follows credentials and host reach, but it scores empty input as safe, and neither privileged, root agent scores 2 or below; one scores 6.3.
 - **Stock Laya is not usable for either task.** On alignment, its probabilities rank misaligned attributes no better than chance (AUROC 0.52). On risk, every score lands near 5.
 - **Simple rules make a strong alignment baseline.** Normalized diff sorts lists and keys, ignores case and trailing slashes, and scores 0.87 with no model. The models beat it only by recognising equivalent notation, and even there they raise false alarms.
@@ -40,6 +42,7 @@ You need Python 3.12 and `make`. Each model has its own extra requirement:
 | stock Laya | nothing; downloads its checkpoint on first use | about 1 minute per task |
 | Gemini | `GOOGLE_API_KEY` in the environment | about 4 minutes for alignment |
 | qwen3:14b | [Ollama](https://ollama.com): `make models`, then `ollama serve` | about 25–35 minutes for alignment |
+| qwen3:32b | Ollama, `ollama pull qwen3:32b` (20 GB), and a Mac with 32 GB or more: it takes 22 GB of GPU memory | too big for this laptop; on a Mac mini (M4 Pro, 48 GB), about 16 minutes for alignment and 4 for risk |
 | JevK5 | [llama.cpp](https://github.com/ggml-org/llama.cpp) (`brew install llama.cpp`): `make models`, then `make serve-jevk5` | about 16 minutes for alignment |
 | Gemini, production prompt (risk only) | a Rail Center checkout, at `RAILCENTER` (default `~/workspace/rail-center-rc000`) | about 2 minutes |
 
@@ -57,10 +60,12 @@ export GOOGLE_API_KEY=...
 make alignment       # all six systems on alignment detection
 make risk            # laya, gemini, qwen and jevk5 on risk detection, 3 runs each
 make alignment SYSTEMS="laya gemini" RUNS=3   # some systems; the others' stored results are kept
+make alignment SYSTEMS=qwen32b  # qwen3:32b, only by name: it needs 32 GB or more
+make risk SYSTEMS=qwen32b
 ```
 
 - **Missing servers or keys:** a system whose server or key is missing is recorded as "not run", and the rest carry on.
-- **Memory:** qwen3:14b and JevK5 together need about 14 GB. On a 16 GB machine, stop one server before running the other. `make help` lists every target.
+- **Memory:** qwen3:14b and JevK5 together need about 14 GB. On a 16 GB machine, stop one server before running the other. qwen3:32b needs about 22 GB on its own, so `make alignment` and `make risk` run it only when asked for by name: a run that cannot reach a system drops that system's stored results. `make help` lists every target.
 
 ## Layout
 

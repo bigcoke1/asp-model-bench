@@ -1,19 +1,20 @@
 # Risk detection
 
-Can a model score an agent's evidence bundle on the ASP risk categories, the way Rail Center's LLM profiler does? This folder benchmarks stock [Laya](https://huggingface.co/convaiinnovations/laya), Gemini, `qwen3:14b` and JevK5 on the same questions, over the 20 synthetic bundles in [`../data`](../data).
+Can a model score an agent's evidence bundle on the ASP risk categories, the way Rail Center's LLM profiler does? This folder benchmarks stock [Laya](https://huggingface.co/convaiinnovations/laya), Gemini, `qwen3:14b`, `qwen3:32b` and JevK5 on the same questions, over the 20 synthetic bundles in [`../data`](../data).
 
 - **"Stock"** means as published, not tuned on ASP data. Laya's `typed-decisions` checkpoint is already Convai's own fine-tune for general decisions: 0.766 on their benchmark, against 0.362 for the base model. JevK5 was also run as published.
 - **The categories and required inputs** come from Rail Center (`api/src/profiling/coverage.py`).
 - **Run it:** `make risk` from the repo root, or `make risk-report` to print these tables without calling a model. See [Rerun, or read later](#rerun-or-read-later).
 
-## Benchmark: stock Laya vs Gemini vs qwen3:14b vs JevK5
+## Benchmark: stock Laya vs Gemini vs qwen3:14b and qwen3:32b vs JevK5
 
-Can stock Laya score agent evidence bundles on the ASP risk categories, and how does it compare with Gemini, `qwen3:14b` and JevK5?
+Can stock Laya score agent evidence bundles on the ASP risk categories, and how does it compare with Gemini, `qwen3:14b`, `qwen3:32b` and JevK5?
 - **Gemini** is the model Rail Center's LLM profiler uses.
 - **`qwen3:14b`** is the best open-weight model that fits this laptop.
+- **`qwen3:32b`** is the largest dense Qwen3, run on a Mac mini with 48 GB to see whether a bigger open model does better.
 - **JevK5** stands in for Jev, which could not be reached. Of the open Jev-class models, it ranks highest on [JevBench](https://benchmarkheaven.com/jev-models) v1.4.2 among those with a documented way to run on a Mac.
 
-Run on 2026-09-25 with `bench.py`. Every number here is in [`results/bench_results.json`](results/bench_results.json).
+Run on 2026-09-25 with `bench.py`, on a 16 GB M3 laptop; the qwen3:32b column on 2026-09-28, on a Mac mini (M4 Pro, 48 GB). Every number here is in [`results/bench_results.json`](results/bench_results.json).
 
 **Short answer:**
 - **Stock Laya does not read the evidence.** Every score lands between 4.8 and 5.7, and it scores empty input safer than any real agent.
@@ -22,6 +23,7 @@ Run on 2026-09-25 with `bench.py`. Every number here is in [`results/bench_resul
   - Even at temperature 0, its three runs gave exactly the same score on only 15 of 32 items; 29 of 32 stayed within 1 point.
 - **The prompt matters more than the model.** The same Gemini with a short prompt barely notices baked credentials.
 - **qwen3:14b reads identity well but fails the empty-input check:** it gives no evidence at all a perfect 10.
+- **qwen3:32b does worse than qwen3:14b, not better:** it passes 2 checks to the 14b's 3. Its containment scores stay at 4–6 whether or not an agent can reach the host, and it also gives empty input a 10.
 - **JevK5 reads the evidence, unlike stock Laya, but it calls empty input safe.** Its identity scores move 1.6 points with credentials, and its runs are identical every time. But empty input scores safer than most real agents, and one privileged-root agent scores 6.3.
 
 ### How to read the tables
@@ -44,33 +46,34 @@ A fact counts only when the bundle actually shows it, meaning the attribute carr
 
 ### Scorecard
 
-| What a good scorer does | stock Laya | Gemini, short prompt | Gemini, production prompt | qwen3:14b | JevK5 |
-|---|---|---|---|---|---|
-| Scores agents that can reach the host **lower** on containment | ✗ no difference | ✓ 1.3 lower | ✓ 1.5 lower | ✓ 1.5 lower | ✓ 0.9 lower |
-| Scores the privileged, root agents **2 or below** on containment | ✗ 0 of 2 | ✓ 2 of 2 | ✓ 2 of 2 | ✗ 0 of 2 | ✗ 0 of 2 |
-| Scores agents with a baked credential **lower** on identity | ✗ no difference | ~ 0.3 lower (weak) | ✓ 2.9 lower | ✓ 2.2 lower | ✓ 1.6 lower |
-| Scores agents holding no credentials **higher** on identity | ✗ no difference | ✓ 1.3 higher | ✓ 2.6 higher | ✓ 2.2 higher | ✓ 1.6 higher |
-| Does **not** score an empty input as safe (identity / containment) | ✗ 6.0 / 6.0: safer than every real bundle | ✓ 1.0 / 1.0 | – not asked (coverage clears nothing) | ✗ 10.0 / 10.0: safer than every real bundle | ~ 7.4 / 6.8: safer than 16 of 20 / 10 of 12 real bundles |
-| Range of scores across agents (identity / containment) | 4.8–5.4 / 5.2–5.7 | 1–6 / 1–3 | 1–8 / 0–4 | 1–8 / 3–6 | 1.6–8.1 / 3.0–7.9 |
-| Items where the 3 runs agreed: exactly / within 1 point | 34 / 34 of 34 | 30 / 33 of 34 | 15 / 29 of 32 | 33 / 34 of 34 | 34 / 34 of 34 |
-| Median time per call | 241 ms | 587 ms | 2,442 ms | 1,272 ms | 2,791 ms |
+| What a good scorer does | stock Laya | Gemini, short prompt | Gemini, production prompt | qwen3:14b | qwen3:32b | JevK5 |
+|---|---|---|---|---|---|---|
+| Scores agents that can reach the host **lower** on containment | ✗ no difference | ✓ 1.3 lower | ✓ 1.5 lower | ✓ 1.5 lower | ✗ no difference | ✓ 0.9 lower |
+| Scores the privileged, root agents **2 or below** on containment | ✗ 0 of 2 | ✓ 2 of 2 | ✓ 2 of 2 | ✗ 0 of 2 | ✗ 0 of 2 | ✗ 0 of 2 |
+| Scores agents with a baked credential **lower** on identity | ✗ no difference | ~ 0.3 lower (weak) | ✓ 2.9 lower | ✓ 2.2 lower | ✓ 0.9 lower | ✓ 1.6 lower |
+| Scores agents holding no credentials **higher** on identity | ✗ no difference | ✓ 1.3 higher | ✓ 2.6 higher | ✓ 2.2 higher | ✓ 2.9 higher | ✓ 1.6 higher |
+| Does **not** score an empty input as safe (identity / containment) | ✗ 6.0 / 6.0: safer than every real bundle | ✓ 1.0 / 1.0 | – not asked (coverage clears nothing) | ✗ 10.0 / 10.0: safer than every real bundle | ✗ 10.0 / 10.0: safer than every real bundle | ~ 7.4 / 6.8: safer than 16 of 20 / 10 of 12 real bundles |
+| Range of scores across agents (identity / containment) | 4.8–5.4 / 5.2–5.7 | 1–6 / 1–3 | 1–8 / 0–4 | 1–8 / 3–6 | 2–8 / 4–6 | 1.6–8.1 / 3.0–7.9 |
+| Items where the 3 runs agreed: exactly / within 1 point | 34 / 34 of 34 | 30 / 33 of 34 | 15 / 29 of 32 | 33 / 34 of 34 | 34 / 34 of 34 | 34 / 34 of 34 |
+| Median time per call | 241 ms | 587 ms | 2,442 ms | 1,272 ms | 642 ms | 2,791 ms |
 
 Notes on the scorecard:
 - **Why production was not asked the empty input:** production never calls a model when coverage clears nothing, so this benchmark doesn't either.
 - **Why its time per call is longer:** one production call scores all 6–7 categories coverage clears, not one.
 - **Why qwen3:14b looks faster than JevK5:** Ollama reuses a prompt it has just seen, so qwen3:14b's first run of an item takes 6.2 s and the two repeats 0.8 s (medians). JevK5's client turns that cache off, so each of its runs takes about 2.8 s for a median of 690 input tokens.
+- **qwen3:32b shows the same caching, on the Mac mini:** 5.5 s for an item's first run and 0.6 s for each repeat (medians).
 - **What "agreed" means:** "exactly" needs all three runs identical, so 5, 5, 6 does not count; "within 1 point" means the highest and lowest runs are at most 1 apart. The reported score is the median, which absorbs a single stray run: 5, 5, 6 gives 5. A 1-point wobble can still flip an agent's band when a band threshold falls between the two values.
 
 ### The averages behind the scorecard
 
-| Average score of … (number of agents) | stock Laya | Gemini, short prompt | Gemini, production prompt | qwen3:14b | JevK5 |
-|---|---|---|---|---|---|
-| containment, agents that **can** reach the host (6) | 5.4 | 1.0 | 1.0 | 4.5 | 5.7 |
-| containment, agents that **cannot** (6) | 5.5 | 2.3 | 2.5 | 6.0 | 6.7 |
-| identity, agents **with** a visible baked credential (5) | 5.1 | 2.0 | 3.0 | 4.6 | 4.5 |
-| identity, agents **without** one (15) | 5.1 | 2.3 | 5.9 | 6.8 | 6.1 |
-| identity, agents holding **no** credentials (4) | 5.1 | 3.2 | 7.2 | 8.0 | 7.0 |
-| identity, agents holding **some** (16) | 5.1 | 1.9 | 4.7 | 5.8 | 5.4 |
+| Average score of … (number of agents) | stock Laya | Gemini, short prompt | Gemini, production prompt | qwen3:14b | qwen3:32b | JevK5 |
+|---|---|---|---|---|---|---|
+| containment, agents that **can** reach the host (6) | 5.4 | 1.0 | 1.0 | 4.5 | 4.8 | 5.7 |
+| containment, agents that **cannot** (6) | 5.5 | 2.3 | 2.5 | 6.0 | 5.0 | 6.7 |
+| identity, agents **with** a visible baked credential (5) | 5.1 | 2.0 | 3.0 | 4.6 | 4.0 | 4.5 |
+| identity, agents **without** one (15) | 5.1 | 2.3 | 5.9 | 6.8 | 4.9 | 6.1 |
+| identity, agents holding **no** credentials (4) | 5.1 | 3.2 | 7.2 | 8.0 | 7.0 | 7.0 |
+| identity, agents holding **some** (16) | 5.1 | 1.9 | 4.7 | 5.8 | 4.1 | 5.4 |
 
 For example, Gemini with the production prompt gives agents with a baked credential 3.0 on average and agents without one 5.9. That is the "✓ 2.9 lower" in the scorecard.
 
@@ -83,15 +86,20 @@ Spearman rank correlation: 1 means the same order, 0 unrelated, negative the opp
 | stock Laya ~ Gemini, short prompt | 0.08 | 0.31 |
 | stock Laya ~ Gemini, production prompt | 0.04 | 0.00 |
 | stock Laya ~ qwen3:14b | 0.11 | 0.19 |
+| stock Laya ~ qwen3:32b | 0.16 | 0.40 |
 | stock Laya ~ JevK5 | −0.08 | 0.14 |
 | Gemini, short prompt ~ Gemini, production prompt | 0.15 | 0.43 |
 | Gemini, short prompt ~ qwen3:14b | 0.36 | 0.49 |
+| Gemini, short prompt ~ qwen3:32b | 0.48 | 0.30 |
 | Gemini, short prompt ~ JevK5 | 0.46 | 0.15 |
 | Gemini, production prompt ~ qwen3:14b | 0.43 | 0.65 |
+| Gemini, production prompt ~ qwen3:32b | 0.47 | 0.63 |
 | Gemini, production prompt ~ JevK5 | 0.43 | 0.08 |
+| qwen3:14b ~ qwen3:32b | 0.63 | 0.42 |
 | qwen3:14b ~ JevK5 | 0.51 | 0.24 |
+| qwen3:32b ~ JevK5 | 0.44 | 0.15 |
 
-Stock Laya's ranking is unrelated to every other system's. Gemini with the production prompt and `qwen3:14b` agree most, but still only moderately. JevK5 ranks identity about as the LLMs do (0.43–0.51), but its containment ranking is nearly unrelated to theirs (0.08–0.24).
+Stock Laya's ranking is unrelated to every other system's. The strongest agreements are only moderate: Gemini with the production prompt and `qwen3:14b` on containment (0.65), and the two Qwen models on identity (0.63). The two Qwen models get the same prompt, yet rank containment differently (0.42). JevK5 ranks identity about as the LLMs do (0.43–0.51), but its containment ranking is nearly unrelated to theirs (0.08–0.24).
 
 ### What it shows
 
@@ -105,6 +113,11 @@ Stock Laya's ranking is unrelated to every other system's. Gemini with the produ
 - **qwen3:14b:** it reads identity nearly as well as the production prompt (2.2 lower for baked credentials) with only the short prompt. Its weaknesses:
   - Containment is weaker, and neither privileged-root agent scored 2 or below.
   - Empty input scores 10, which breaks the design's rule that nothing unobserved may make an agent look safer.
+- **qwen3:32b:** more than twice the size of `qwen3:14b` and asked the same way, it does worse.
+  - Containment barely moves: every agent scores 4–6, and agents that can reach the host average 4.8 against 5.0 for those that cannot. The two privileged, root agents score 5 and 4.
+  - On identity, holding no credentials raises the score by 2.9, the most of any system, but a baked credential lowers it by only 0.9, just over the bar, against 2.2 for `qwen3:14b`.
+  - Empty input scores 10, as with `qwen3:14b`.
+  - Its three runs were identical on every item.
 - **JevK5:** it follows the evidence, which stock Laya does not. A baked credential lowers identity by 1.6 points, holding no credentials raises it by 1.6, and host reach lowers containment by 0.95, just over the bar. Its three runs were identical on every item. Its weaknesses:
   - Containment is the weakest of the systems that read evidence. Bundle 0009 is privileged and root, yet it scores 6.3; its most likely level is 7, "read-write over a scoped store, egress allow-listed".
   - Empty input breaks the same rule as `qwen3:14b`, if less blatantly. Its most likely level is 10, "no meaningful exposure", and it scores 7.4 / 6.8, safer than 16 of 20 identity and 10 of 12 containment bundles.
@@ -126,7 +139,7 @@ Stock Laya's ranking is unrelated to every other system's. Gemini with the produ
 | Question, every column but the production prompt | The same: `asp_score.question()`, 10 levels scored 1–10. Ten, not the design doc's 0–10, because Jev (planned as another column) accepts at most 10 levels. |
 | Gemini, production prompt | The whole bundle through Rail Center's own `profiling.prompt.render_prompt` (v7, identical to `origin/master`). One call per bundle asks every category coverage clears; `identity` and `containment` are read from the reply. The score is the model's raw 0–10, before the mixer's clamps. |
 | Runs | Every system answers every item 3 times; its score is the median. Production keeps the lowest of three instead. |
-| Models | Laya `typed-decisions`, stock, local and deterministic. Gemini `gemini-3.5-flash-lite` through the OpenAI-compatible endpoint, temperature 0, JSON output, as Rail Center calls it. `qwen3:14b` on local Ollama, thinking off, temperature 0. JevK5 v0.3, 4B, as `jevk5-4b-v0.3-Q8_0.gguf` on a local `llama-server` (llama.cpp b11146, Metal), read through JevK5's own client at the file's calibration temperature, 1.22. JevBench ranked v0.2; v0.3 is the current release. |
+| Models | Laya `typed-decisions`, stock, local and deterministic. Gemini `gemini-3.5-flash-lite` through the OpenAI-compatible endpoint, temperature 0, JSON output, as Rail Center calls it. `qwen3:14b` on local Ollama, thinking off, temperature 0, and `qwen3:32b` (Q4_K_M) the same way on a Mac mini with 48 GB. JevK5 v0.3, 4B, as `jevk5-4b-v0.3-Q8_0.gguf` on a local `llama-server` (llama.cpp b11146, Metal), read through JevK5's own client at the file's calibration temperature, 1.22. JevBench ranked v0.2; v0.3 is the current release. |
 | Jev | Not run: thejevai.com's upstream provider rejected every request, and TypeSafe is not taking signups. JevK5 stands in for it. `bench.py --systems jev --merge` adds Jev later. |
 
 **Caveats:**
@@ -141,6 +154,7 @@ From the repo root:
 ```bash
 make risk-report                        # print these tables from the stored results, no model calls
 make risk                               # rerun laya, gemini, qwen and jevk5, 3 runs each; keeps the rest
+make risk SYSTEMS=qwen32b               # rerun qwen3:32b, on a machine with 32 GB or more
 make risk SYSTEMS="qwen" RUNS=3         # rerun one system
 RAILCENTER=~/path/to/rail-center make risk SYSTEMS=gemini-prod   # needs a Rail Center checkout
 ```

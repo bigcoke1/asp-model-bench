@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stock Laya vs Gemini vs qwen3:14b vs JevK5 (and Jev, when it answers) on the same ASP scoring questions.
+"""Stock Laya vs Gemini vs qwen3:14b and qwen3:32b vs JevK5 (and Jev, when it answers) on the same ASP scoring questions.
 
 Five systems get the SAME text and the SAME question for each item:
   - items: the bundles in data/ (asp-datagen pilot 1), `identity` and `containment`, skipping any the coverage
@@ -26,14 +26,14 @@ Results go to results/bench_results.json: settings, every item with the exact te
 medians, and the summary, so a later reader needs nothing but that file.
 
 Keys come from the environment: GOOGLE_API_KEY for Gemini; JEV_API_KEY (+ JEV_BASE_URL, JEV_MODEL)
-for Jev. qwen3:14b is served by a local Ollama; JevK5 by a local llama-server (JEVK5_URL):
+for Jev. qwen3:14b and qwen3:32b are served by a local Ollama; JevK5 by a local llama-server (JEVK5_URL):
 
     llama-server --hf-repo alibiserikbay/JevK5-GGUF --hf-file jevk5-4b-v0.3-Q8_0.gguf \
         -c 8192 -ngl 99 --port 8093
 
 From the repo root (or through the Makefile: `make risk`, `make risk-report`):
 
-    python -m risk_detection.bench [--systems laya gemini gemini-prod qwen jevk5] [--runs 3]
+    python -m risk_detection.bench [--systems laya gemini gemini-prod qwen qwen32b jevk5] [--runs 3]
     python -m risk_detection.bench --systems gemini-prod --merge   # add one system, keep the rest
     python -m risk_detection.bench --report                        # print the tables, no calls
 """
@@ -184,6 +184,14 @@ class Qwen:
             return {"score": level_to_score(json.loads(r["message"]["content"])["level"])}
         except (KeyError, TypeError, json.JSONDecodeError):
             return {"score": None}
+
+
+class Qwen32(Qwen):
+    """qwen3:32b (Q4_K_M), asked exactly as qwen3:14b is."""
+    key, label = "qwen32b", "qwen3:32b"
+
+    def __init__(self):
+        super().__init__("qwen3:32b")
 
 
 class JevK5:
@@ -378,7 +386,7 @@ def table(doc) -> str:
 
 def ordered(results, settings):
     """Columns in a fixed order, so the two Gemini columns sit side by side."""
-    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, JevK5.label, Jev.label]
+    order = [Laya.label, Gemini.label, GeminiProd.label, Qwen.label, Qwen32.label, JevK5.label, Jev.label]
     rank = lambda n: order.index(settings[n]["label"]) if settings[n]["label"] in order else len(order)
     return {n: results[n] for n in sorted(results, key=rank)}
 
@@ -386,7 +394,7 @@ def ordered(results, settings):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--systems", nargs="+", default=["laya", "gemini", "gemini-prod", "qwen", "jevk5"],
-                    choices=["laya", "gemini", "gemini-prod", "qwen", "jevk5", "jev"])
+                    choices=["laya", "gemini", "gemini-prod", "qwen", "qwen32b", "jevk5", "jev"])
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
     ap.add_argument("--out", default=str(HERE / "results/bench_results.json"))
@@ -405,7 +413,7 @@ def main():
         print("risk inputs: match the stored results" if same else "risk inputs: DIFFER from the stored results")
         sys.exit(0 if same else 1)
     make = {"laya": lambda: Laya(agent), "gemini": lambda: Gemini(args.gemini_model),
-            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "jevk5": JevK5, "jev": Jev}
+            "gemini-prod": lambda: GeminiProd(args.gemini_model), "qwen": Qwen, "qwen32b": Qwen32, "jevk5": JevK5, "jev": Jev}
     systems = [make[k]() for k in args.systems]
 
     results, status, settings = {}, {}, {}

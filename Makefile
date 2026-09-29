@@ -36,7 +36,7 @@ serve-jevk5:  ## serve JevK5 with llama.cpp on port 8093 (JEVK5_PORT); stays in 
 	llama-server --hf-repo alibiserikbay/JevK5-GGUF --hf-file jevk5-4b-v0.3-Q8_0.gguf \
 		-c 8192 -ngl 99 --host 127.0.0.1 --port $(JEVK5_PORT)
 
-risk:  ## run risk detection (SYSTEMS default: laya gemini qwen jevk5; RUNS default 3)
+risk:  ## run risk detection (SYSTEMS default: laya gemini qwen jevk5; RUNS default 3; qwen32b only by name)
 	$(PY) -m risk_detection.bench --merge --systems $(RISK_SYSTEMS) $(RUNS_FLAG)
 
 risk-report:  ## print the risk-detection tables from the stored results
@@ -45,7 +45,7 @@ risk-report:  ## print the risk-detection tables from the stored results
 alignment-data:  ## rebuild the alignment dataset in alignment_detection/data (deterministic)
 	$(PY) -m alignment_detection.make_pairs
 
-alignment:  ## run alignment detection (SYSTEMS default: all six; RUNS default 1)
+alignment:  ## run alignment detection (SYSTEMS default: all but qwen32b; RUNS default 1)
 	$(PY) -m alignment_detection.bench --merge --systems $(ALIGNMENT_SYSTEMS) $(RUNS_FLAG)
 
 alignment-quick:  ## alignment detection with no model at all: the two diff baselines, in seconds

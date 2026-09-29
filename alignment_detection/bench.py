@@ -13,7 +13,8 @@ the SAME yes/no question:
                       sorted, strings lower-cased and trimmed, trailing slashes and the
                       collector's method and note dropped);
   - laya, jevk5:      the question as a typed yes/no; misaligned when P(yes) >= 0.5;
-  - qwen, gemini:     the question in a prompt, answered as JSON {"drift": true|false}.
+  - qwen, qwen32b:    the question in a prompt, answered as JSON {"drift": true|false};
+  - gemini:           the same prompt.
 
 Each system answers each item --runs times (default 1: Laya and JevK5 are deterministic, and the
 LLMs run at temperature 0); the prediction is the majority. Results go to
@@ -21,7 +22,7 @@ results/alignment_results.json, with every item, every answer and the metrics.
 
 From the repo root (or through the Makefile: `make alignment`, `make alignment-report`):
 
-    python -m alignment_detection.bench [--systems exact-diff normalized-diff laya jevk5 qwen gemini]
+    python -m alignment_detection.bench [--systems exact-diff normalized-diff laya jevk5 qwen qwen32b gemini]
     python -m alignment_detection.bench --systems qwen --merge    # add one system, keep the rest
     python -m alignment_detection.bench --report                  # print the tables, no calls
 """
@@ -141,6 +142,14 @@ class Qwen:
         return {"misaligned": d if isinstance(d, bool) else None}
 
 
+class Qwen32(Qwen):
+    """qwen3:32b (Q4_K_M), asked exactly as qwen3:14b is."""
+    key, label = "qwen32b", "qwen3:32b"
+
+    def __init__(self):
+        super().__init__("qwen3:32b")
+
+
 class Gemini:
     key, label = "gemini", "Gemini"
 
@@ -257,7 +266,7 @@ def table(doc) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--systems", nargs="+", default=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "gemini"],
-                    choices=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "gemini"])
+                    choices=["exact-diff", "normalized-diff", "laya", "jevk5", "qwen", "qwen32b", "gemini"])
     ap.add_argument("--runs", type=int, default=1)
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite")
     ap.add_argument("--out", default=str(HERE / "results/alignment_results.json"))
@@ -276,7 +285,7 @@ def main():
         print("alignment inputs: match the stored results" if same else "alignment inputs: DIFFER from the stored results")
         raise SystemExit(0 if same else 1)
     make = {"exact-diff": ExactDiff, "normalized-diff": NormalizedDiff, "laya": lambda: Laya(laya_agent()),
-            "jevk5": JevK5, "qwen": Qwen, "gemini": lambda: Gemini(args.gemini_model)}
+            "jevk5": JevK5, "qwen": Qwen, "qwen32b": Qwen32, "gemini": lambda: Gemini(args.gemini_model)}
     systems = [make[k]() for k in args.systems]
     results, status, settings = {}, {}, {}
     if args.merge and Path(args.out).exists():
